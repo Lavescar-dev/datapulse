@@ -16,8 +16,3 @@
 		</main>
 	</div>
 </div>
-
-<!-- DEMO Watermark -->
-<div class="pointer-events-none fixed bottom-4 right-4 z-50 rounded-lg bg-danger/10 px-3 py-1.5 text-xs font-medium text-danger/70 backdrop-blur-sm">
-	DEMO - Mock Data
-</div>
