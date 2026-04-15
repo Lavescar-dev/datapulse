@@ -1,0 +1,20 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import SEOMain from '../components/seo/SEOMain';
+---
+
+<AppShell
+	title="SEO Analiz - DataPulse"
+	titleI18nKey="page.seo"
+	activePage="seo"
+	eyebrow="SEO Analiz"
+	heroTitle="SEO Analiz"
+	heroDescription="Site performansı, meta etiketler, başlık yapısı ve mobil uyumluluk"
+	showHero={false}
+	sessionMode="analysis"
+	accent="#facc15"
+	accentSoft="rgba(250, 204, 21, 0.18)"
+	metrics={[]}
+>
+	<SEOMain client:only="solid-js" />
+</AppShell>

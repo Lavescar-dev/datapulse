@@ -1,0 +1,188 @@
+---
+import { defaultLocale, i18nMessages } from '../../lib/i18n';
+import CryptoSwitch from './CryptoSwitch.astro';
+
+interface NavItem {
+	href: string;
+	label: string;
+	key: string;
+	i18nKey: string;
+}
+
+interface Props {
+	activePage: string;
+	switchVariant?: 'cyber' | 'gruvbox';
+}
+
+const { activePage, switchVariant = 'cyber' } = Astro.props;
+
+const navItems: NavItem[] = [
+	{ href: '/dashboard', label: 'Kripto', key: 'dashboard', i18nKey: 'nav.dashboard' },
+	{ href: '/news', label: 'Haberler', key: 'news', i18nKey: 'nav.news' },
+	{ href: '/social', label: 'Sosyal Medya', key: 'social', i18nKey: 'nav.social' },
+	{ href: '/scraper', label: 'Scraper', key: 'scraper', i18nKey: 'nav.scraper' },
+	{ href: '/seo', label: 'SEO', key: 'seo', i18nKey: 'nav.seo' },
+	{ href: '/price-tracker', label: 'Fiyat', key: 'price-tracker', i18nKey: 'nav.priceTracker' },
+	{ href: '/api-monitor', label: 'API', key: 'api-monitor', i18nKey: 'nav.apiMonitor' },
+	{ href: '/dashboard-builder', label: 'Dashboard', key: 'dashboard-builder', i18nKey: 'nav.dashboardBuilder' },
+];
+---
+
+<header class="shell-topbar sticky top-0 z-50 border-b border-gray-800 bg-gray-900">
+	<div class="dashboard-shell shell-topbar-inner py-4">
+		<div class="flex items-center justify-between gap-4">
+			<div class="flex items-center gap-4">
+				<button
+					id="mobileMenuBtn"
+					class="p-2 text-gray-400 transition-colors hover:text-gray-100 md:hidden"
+					aria-label="Open menu"
+				>
+					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+					</svg>
+				</button>
+				<a
+					href="/"
+					class="shell-topbar-brand bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-xl font-bold text-transparent transition-opacity hover:opacity-80 md:text-2xl"
+				>
+					DataPulse
+				</a>
+				<nav class="hidden flex-wrap gap-4 md:flex">
+					{navItems.map((item) => (
+						<a
+							href={item.href}
+							data-i18n={item.i18nKey}
+							class:list={[
+								'shell-topbar-link text-sm transition-colors',
+								activePage === item.key ? 'font-medium text-blue-400' : 'text-gray-400 hover:text-gray-100',
+							]}
+						>
+							{item.label}
+						</a>
+					))}
+				</nav>
+			</div>
+			<div class="flex items-center gap-2">
+				<slot name="headerActions" />
+				<CryptoSwitch variant={switchVariant} />
+			</div>
+		</div>
+	</div>
+</header>
+
+<div id="mobileMenuOverlay" class="fixed inset-0 z-50 hidden md:hidden">
+	<div class="absolute inset-0 bg-black/50" id="mobileMenuBackdrop"></div>
+	<div class="absolute top-0 left-0 h-full w-64 border-r border-gray-800 bg-gray-900" id="mobileMenuPanel">
+		<div class="flex items-center justify-between border-b border-gray-800 p-4">
+			<span class="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-lg font-bold text-transparent">
+				DataPulse
+			</span>
+			<button
+				id="mobileMenuClose"
+				class="p-2 text-gray-400 transition-colors hover:text-gray-100"
+				aria-label="Close menu"
+			>
+				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+				</svg>
+			</button>
+		</div>
+		<nav class="space-y-2 p-4">
+			{navItems.map((item) => (
+				<a
+					href={item.href}
+					data-i18n={item.i18nKey}
+					class:list={[
+						'block rounded-lg px-4 py-3 transition-colors',
+						activePage === item.key
+							? 'bg-blue-400/10 font-medium text-blue-400'
+							: 'text-gray-300 hover:bg-gray-800',
+					]}
+				>
+					{item.label}
+				</a>
+			))}
+		</nav>
+	</div>
+</div>
+
+<script define:vars={{ defaultLocale, i18nMessages }}>
+	function resolveLocale(rawLocale) {
+		return rawLocale === 'en' ? 'en' : 'tr';
+	}
+
+	function readMessage(locale, key) {
+		const parts = key.split('.');
+		let current = i18nMessages[locale];
+		for (const part of parts) {
+			current = current?.[part];
+		}
+		return typeof current === 'string' ? current : key;
+	}
+
+	function interpolate(template, params = {}) {
+		return template.replace(/\{(\w+)\}/g, (_, token) => String(params[token] ?? ''));
+	}
+
+	function applyLocale(locale) {
+		document.documentElement.lang = locale;
+
+		document.querySelectorAll('[data-i18n], [data-i18n-en], [data-i18n-tr]').forEach((element) => {
+			const key = element.dataset.i18n;
+			const fallbackText = element.dataset.i18nTr ?? element.textContent ?? '';
+
+			if (!element.dataset.i18nTr && fallbackText) {
+				element.dataset.i18nTr = fallbackText;
+			}
+
+			const localizedValue =
+				element.getAttribute(`data-i18n-${locale}`) ??
+				(locale === 'tr' ? (element.dataset.i18nTr ?? fallbackText) : null) ??
+				(key ? readMessage(locale, key) : null) ??
+				(locale === 'en' ? (element.dataset.i18nEn ?? fallbackText) : null) ??
+				fallbackText;
+
+			element.textContent = localizedValue;
+		});
+
+		document.querySelectorAll('[data-i18n-attr]').forEach((element) => {
+			const pairs = element.dataset.i18nAttr?.split(',') ?? [];
+			for (const pair of pairs) {
+				const [attributeName, key] = pair.split(':');
+				if (!attributeName || !key) continue;
+				element.setAttribute(attributeName.trim(), readMessage(locale, key.trim()));
+			}
+		});
+
+		localStorage.setItem('dp-locale', locale);
+		window.dispatchEvent(new CustomEvent('datapulse:localechange', { detail: { locale } }));
+	}
+
+	function getLocale() {
+		const storedLocale = localStorage.getItem('dp-locale');
+		if (storedLocale) {
+			return resolveLocale(storedLocale);
+		}
+
+		if (navigator.language?.toLowerCase().startsWith('tr')) {
+			return 'tr';
+		}
+
+		return resolveLocale(defaultLocale);
+	}
+
+	window.DataPulseI18n = {
+		getLocale,
+		setLocale: applyLocale,
+		t: (key, params) => interpolate(readMessage(getLocale(), key), params),
+	};
+
+	const initialLocale = getLocale();
+
+	const applyInitialLocale = () => applyLocale(initialLocale);
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', applyInitialLocale, { once: true });
+	} else {
+		applyInitialLocale();
+	}
+</script>

@@ -1,0 +1,13 @@
+[package]
+name = "datapulse-backend-rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.8", features = ["macros"] }
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+jsonwebtoken = "9"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.6", features = ["cors"] }

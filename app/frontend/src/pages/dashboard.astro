@@ -1,0 +1,246 @@
+---
+import '../styles/global.css';
+import CoinTable from '../components/crypto/CoinTable';
+import MarketStats from '../components/crypto/MarketStats';
+import CryptoTopbar from '../components/layout/CryptoTopbar.astro';
+const publicApiBaseUrl = import.meta.env.PUBLIC_DATAPULSE_API_BASE_URL || '';
+---
+
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title data-i18n="title" data-i18n-en="Crypto Dashboard - DataPulse">Dashboard - DataPulse</title>
+	</head>
+	<body class="dashboard-app bg-gray-950 text-gray-100 min-h-screen">
+		<!-- Theme Toggle Button -->
+		<button
+			id="themeToggle"
+			class="fixed top-6 right-6 z-50 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg p-3 transition-all shadow-lg"
+			aria-label="Toggle dark mode"
+		>
+			<span id="themeIcon">🌙</span>
+		</button>
+
+		<CryptoTopbar activePage="dashboard" />
+
+		<!-- Main Content -->
+		<main class="dashboard-shell dashboard-stack py-5 sm:py-6 xl:py-7 2xl:py-8">
+			<MarketStats client:only="solid-js" />
+
+			<div class="dashboard-panel overflow-hidden">
+				<div class="border-b border-slate-800/70 px-5 py-4">
+					<div class="flex flex-col gap-2 lg:flex-row lg:items-end lg:justify-between">
+						<div>
+							<div class="text-[11px] uppercase tracking-[0.28em] text-slate-500" data-i18n="heroKicker" data-i18n-en="Screener / Movers / Watchlist">Screener / Movers / Watchlist</div>
+							<h2 class="mt-2 text-xl font-semibold text-white" data-i18n="heroTitle" data-i18n-en="Crypto Market Screener">Crypto Market Screener</h2>
+						</div>
+							<p class="max-w-2xl text-sm text-slate-400" data-i18n="heroDesc" data-i18n-en="Search, segmentation, preset views, anomaly badges, and sticky tables help you scan the market faster.">
+								Arama, segmentasyon, preset görünümler, anomaly rozetleri ve sticky tablo ile marketi daha hızlı tarar.
+							</p>
+					</div>
+				</div>
+				<CoinTable client:only="solid-js" />
+			</div>
+		</main>
+
+		<!-- Session Expired Modal -->
+		<div id="sessionExpiredModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+			<div class="bg-gray-900 rounded-lg p-8 max-w-md mx-4 border border-gray-800">
+				<h2 class="text-2xl font-bold mb-4" data-i18n="common.sessionExpiredTitle">Demo oturumu sonlandı</h2>
+				<p class="text-gray-400 mb-6" data-i18n="common.sessionExpiredBody">
+					Oturum veya istek limiti tükenince akış kilitlenir. Yeni bir demo başlatarak tekrar giriş yapabilirsiniz.
+				</p>
+				<button
+					id="restartDemoBtn"
+					data-i18n="common.sessionExpiredRestart"
+					class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-lg transition-all"
+				>
+					Yeni Demo Başlat
+				</button>
+			</div>
+		</div>
+
+		<script define:vars={{ publicApiBaseUrl }}>
+			function apiUrl(path) {
+				return publicApiBaseUrl ? new URL(path, publicApiBaseUrl).toString() : path;
+			}
+
+			async function parseJsonResponse(response) {
+				const text = await response.text();
+
+				if (!text.trim()) {
+					return null;
+				}
+
+				try {
+					return JSON.parse(text);
+				} catch (error) {
+					console.warn('Received invalid JSON response.', error);
+					return null;
+				}
+			}
+
+			function getLocale() {
+				const storedLocale = localStorage.getItem('dp-locale');
+				if (storedLocale === 'en' || storedLocale === 'tr') {
+					return storedLocale;
+				}
+
+				return navigator.language?.toLowerCase().startsWith('en') ? 'en' : 'tr';
+			}
+
+			function t(tr, en) {
+				return getLocale() === 'en' ? en : tr;
+			}
+
+			// Dark mode toggle
+			const themeToggle = document.getElementById('themeToggle');
+			const themeIcon = document.getElementById('themeIcon');
+			const html = document.documentElement;
+
+			// Load saved theme or default to dark
+			const savedTheme = localStorage.getItem('theme') || 'dark';
+			if (savedTheme === 'light') {
+				html.classList.remove('dark');
+				html.classList.add('light');
+				document.body.classList.remove('bg-gray-950', 'text-gray-100');
+				document.body.classList.add('bg-white', 'text-gray-900');
+				if (themeIcon) themeIcon.textContent = '☀️';
+			}
+
+			if (themeToggle) {
+				themeToggle.addEventListener('click', () => {
+					const isDark = html.classList.contains('dark');
+
+					if (isDark) {
+						// Switch to light mode
+						html.classList.remove('dark');
+						html.classList.add('light');
+						document.body.classList.remove('bg-gray-950', 'text-gray-100');
+						document.body.classList.add('bg-white', 'text-gray-900');
+						localStorage.setItem('theme', 'light');
+						if (themeIcon) themeIcon.textContent = '☀️';
+					} else {
+						// Switch to dark mode
+						html.classList.remove('light');
+						html.classList.add('dark');
+						document.body.classList.remove('bg-white', 'text-gray-900');
+						document.body.classList.add('bg-gray-950', 'text-gray-100');
+						localStorage.setItem('theme', 'dark');
+						if (themeIcon) themeIcon.textContent = '🌙';
+					}
+				});
+			}
+
+			// Mobile menu
+			const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+			const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+			const mobileMenuClose = document.getElementById('mobileMenuClose');
+			const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+			function openMobileMenu() {
+				mobileMenuOverlay?.classList.remove('hidden');
+				document.body.style.overflow = 'hidden';
+			}
+
+			function closeMobileMenu() {
+				mobileMenuOverlay?.classList.add('hidden');
+				document.body.style.overflow = '';
+			}
+
+			mobileMenuBtn?.addEventListener('click', openMobileMenu);
+			mobileMenuClose?.addEventListener('click', closeMobileMenu);
+			mobileMenuBackdrop?.addEventListener('click', closeMobileMenu);
+
+			// Session status polling
+			let sessionCheckInterval;
+			let sessionBootstrapPromise = null;
+
+			async function ensureDemoSession() {
+				if (sessionBootstrapPromise) return sessionBootstrapPromise;
+
+				sessionBootstrapPromise = fetch(apiUrl('/api/session/start'), {
+					method: 'POST',
+					credentials: 'include',
+				})
+					.then(() => undefined)
+					.finally(() => {
+						sessionBootstrapPromise = null;
+					});
+
+				return sessionBootstrapPromise;
+			}
+
+			async function checkSessionStatus() {
+				try {
+					const response = await fetch(apiUrl('/api/session/status'), {
+						credentials: 'include',
+					});
+					const data = response.ok ? await parseJsonResponse(response) : null;
+
+					if (!data?.active) {
+						await ensureDemoSession();
+						const retryResponse = await fetch(apiUrl('/api/session/status'), {
+							credentials: 'include',
+						});
+						const retryData = retryResponse.ok ? await parseJsonResponse(retryResponse) : null;
+
+						if (!retryData?.active) {
+							showSessionExpired();
+							return;
+						}
+
+						updateSessionBanner(retryData);
+						return;
+					}
+
+					updateSessionBanner(data);
+				} catch (error) {
+					console.error('Failed to check session status:', error);
+				}
+			}
+
+			function updateSessionBanner(data) {
+				const banner = document.getElementById('sessionBanner');
+				if (!banner) return;
+				banner.classList.remove('is-hidden');
+				banner.setAttribute('aria-hidden', 'false');
+
+				const minutesLeft = Math.floor(data.timeRemaining / 60);
+				const requestsLeft = data.requestsRemaining;
+
+				banner.textContent = t(
+					`Demo aktif: ${requestsLeft} istek kaldı, ${minutesLeft} dakika kaldı`,
+					`Demo active: ${requestsLeft} requests left, ${minutesLeft} minutes left`,
+				);
+			}
+
+			function showSessionExpired() {
+				if (sessionCheckInterval) {
+					clearInterval(sessionCheckInterval);
+				}
+
+				const modal = document.getElementById('sessionExpiredModal');
+				if (modal) {
+					modal.classList.remove('hidden');
+				}
+			}
+
+			// Restart demo button handler
+			const restartBtn = document.getElementById('restartDemoBtn');
+			if (restartBtn) {
+				restartBtn.addEventListener('click', () => {
+					window.location.href = '/';
+				});
+			}
+
+			// Start session checking
+			checkSessionStatus();
+			sessionCheckInterval = setInterval(checkSessionStatus, 30000); // Check every 30 seconds
+		</script>
+	</body>
+</html>

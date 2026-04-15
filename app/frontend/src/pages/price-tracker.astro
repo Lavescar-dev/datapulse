@@ -1,0 +1,22 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import PriceTrackerMain from '../components/price/PriceTrackerMain';
+import NotificationBell from '../components/notifications/NotificationBell';
+---
+
+<AppShell
+	title="Fiyat Takibi - DataPulse"
+	titleI18nKey="page.priceTracker"
+	activePage="price-tracker"
+	eyebrow="Fiyat Takip"
+	heroTitle="Fiyat Takip"
+	heroDescription="Trendyol, Hepsiburada, N11 ve Amazon TR ürün fiyat geçmişi"
+	sessionMode="tracker"
+	accent="#fb923c"
+	accentSoft="rgba(251, 146, 60, 0.18)"
+	showHero={false}
+	metrics={[]}
+>
+	<NotificationBell slot="headerActions" client:only="solid-js" />
+	<PriceTrackerMain client:only="solid-js" />
+</AppShell>

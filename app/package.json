@@ -1,0 +1,21 @@
+{
+  "name": "datapulse",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm:dev:frontend\" \"npm:dev:backend\"",
+    "dev:frontend": "cd frontend && bun run dev",
+    "dev:backend": "cd backend && bun run dev",
+    "build": "cd frontend && bun run build",
+    "preview": "cd frontend && bun run preview",
+    "docker:build:backend": "docker build -f Dockerfile -t datapulse-backend ."
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

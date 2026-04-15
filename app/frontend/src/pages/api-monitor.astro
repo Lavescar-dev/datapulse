@@ -1,0 +1,20 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import ApiMonitorMain from '../components/monitor/ApiMonitorMain';
+---
+
+<AppShell
+	title="API Sağlığı - DataPulse"
+	titleI18nKey="page.apiMonitor"
+	activePage="api-monitor"
+	eyebrow="API Sağlığı"
+	heroTitle="API Sağlığı"
+	heroDescription="API kesintisiz çalışma, yanıt süresi, SSL sertifikası ve sağlık kontrolleri"
+	sessionMode="monitor"
+	accent="#22d3ee"
+	accentSoft="rgba(34, 211, 238, 0.18)"
+	showHero={false}
+	metrics={[]}
+>
+	<ApiMonitorMain client:only="solid-js" />
+</AppShell>

@@ -1,0 +1,305 @@
+---
+import '../styles/global.css';
+import CryptoTopbar from '../components/layout/CryptoTopbar.astro';
+
+interface Metric {
+	label: string;
+	value: string;
+	detail?: string;
+}
+
+interface Props {
+	title: string;
+	titleI18nKey?: string;
+	activePage: string;
+	eyebrow: string;
+	eyebrowI18nKey?: string;
+	heroTitle: string;
+	heroTitleI18nKey?: string;
+	heroDescription: string;
+	heroDescriptionI18nKey?: string;
+	showHero?: boolean;
+	metrics?: Metric[];
+	sessionMode?: 'requests' | 'scrapes' | 'analysis' | 'tracker' | 'monitor' | 'simple';
+	mainClass?: string;
+	containerClass?: string;
+	accent?: string;
+	accentSoft?: string;
+}
+
+const {
+	title,
+	titleI18nKey,
+	activePage,
+	eyebrow,
+	eyebrowI18nKey,
+	heroTitle,
+	heroTitleI18nKey,
+	heroDescription,
+	heroDescriptionI18nKey,
+	showHero = true,
+	metrics = [],
+	sessionMode = 'simple',
+	mainClass = 'dashboard-shell dashboard-stack py-5 sm:py-6 xl:py-7 2xl:py-8',
+	containerClass = '',
+	accent = '#60a5fa',
+	accentSoft = 'rgba(96, 165, 250, 0.18)',
+} = Astro.props;
+
+const navItems = [
+	{ href: '/dashboard', label: 'Kripto', key: 'dashboard' },
+	{ href: '/news', label: 'Haberler', key: 'news' },
+	{ href: '/social', label: 'Sosyal Medya', key: 'social' },
+	{ href: '/scraper', label: 'Scraper', key: 'scraper' },
+	{ href: '/seo', label: 'SEO', key: 'seo' },
+	{ href: '/price-tracker', label: 'Fiyat', key: 'price-tracker' },
+	{ href: '/api-monitor', label: 'API', key: 'api-monitor' },
+	{ href: '/dashboard-builder', label: 'Dashboard', key: 'dashboard-builder' },
+];
+const publicApiBaseUrl = import.meta.env.PUBLIC_DATAPULSE_API_BASE_URL || '';
+---
+
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title {...(titleI18nKey ? { 'data-i18n': titleI18nKey } : {})}>{title}</title>
+	</head>
+	<body
+		class="dashboard-app shell-page bg-gray-950 text-gray-100 min-h-screen"
+		data-session-mode={sessionMode}
+		style={`--shell-accent: ${accent}; --shell-accent-soft: ${accentSoft};`}
+	>
+		<button
+			id="themeToggle"
+			class="fixed top-5 right-5 z-50 shell-icon-button"
+			aria-label="Toggle dark mode"
+		>
+			<span id="themeIcon">🌙</span>
+		</button>
+
+		<CryptoTopbar activePage={activePage}>
+			<Fragment slot="headerActions">
+				<slot name="headerActions" />
+			</Fragment>
+		</CryptoTopbar>
+
+		{showHero && (
+			<section class="dashboard-shell pt-6 sm:pt-7 xl:pt-8">
+					<div class:list={['shell-hero', containerClass]}>
+						<div class="shell-hero-copy">
+							<div class="shell-kicker" {...(eyebrowI18nKey ? { 'data-i18n': eyebrowI18nKey } : {})}>{eyebrow}</div>
+							<h1 class="shell-title" {...(heroTitleI18nKey ? { 'data-i18n': heroTitleI18nKey } : {})}>{heroTitle}</h1>
+							<p class="shell-description dashboard-reading-width" {...(heroDescriptionI18nKey ? { 'data-i18n': heroDescriptionI18nKey } : {})}>{heroDescription}</p>
+						</div>
+					{metrics.length > 0 && (
+						<div class="shell-metrics">
+							{metrics.map((metric) => (
+								<article class="shell-metric-card">
+									<div class="shell-metric-label">{metric.label}</div>
+									<div class="shell-metric-value">{metric.value}</div>
+									{metric.detail && <p class="shell-metric-detail">{metric.detail}</p>}
+								</article>
+							))}
+						</div>
+					)}
+				</div>
+			</section>
+		)}
+
+		<main class={mainClass}>
+			<div class={containerClass}>
+				<slot />
+			</div>
+		</main>
+
+		<div id="sessionExpiredModal" class="hidden fixed inset-0 z-50 bg-slate-950/72 p-4">
+			<div class="flex min-h-full items-center justify-center">
+				<div class="shell-modal-panel max-w-md">
+					<div class="shell-kicker" data-i18n="common.sessionExpiredKicker">Oturum Süresi Doldu</div>
+					<h2 class="mt-3 text-2xl font-semibold text-white" data-i18n="common.sessionExpiredTitle">Demo oturumu sonlandı</h2>
+					<p class="mt-3 text-sm leading-6 text-slate-300" data-i18n="common.sessionExpiredBody">
+						Oturum veya istek limiti tükenince akış kilitlenir. Yeni bir demo başlatarak tekrar giriş yapabilirsiniz.
+					</p>
+					<button id="restartDemoBtn" class="shell-primary-button mt-6 w-full" data-i18n="common.sessionExpiredRestart">Yeni Demo Başlat</button>
+		</div>
+	</div>
+</div>
+
+		<script define:vars={{ publicApiBaseUrl }}>
+			function apiUrl(path) {
+				return publicApiBaseUrl ? new URL(path, publicApiBaseUrl).toString() : path;
+			}
+
+			async function parseJsonResponse(response) {
+				const text = await response.text();
+
+				if (!text.trim()) {
+					return null;
+				}
+
+				try {
+					return JSON.parse(text);
+				} catch (error) {
+					console.warn('Received invalid JSON response.', error);
+					return null;
+				}
+			}
+
+			function getLocale() {
+				const storedLocale = localStorage.getItem('dp-locale');
+				if (storedLocale === 'en' || storedLocale === 'tr') {
+					return storedLocale;
+				}
+
+				return navigator.language?.toLowerCase().startsWith('en') ? 'en' : 'tr';
+			}
+
+			const themeToggle = document.getElementById('themeToggle');
+			const themeIcon = document.getElementById('themeIcon');
+			const html = document.documentElement;
+			const body = document.body;
+			const sessionMode = body.dataset.sessionMode || 'simple';
+
+			function applyTheme(theme) {
+				html.classList.remove('dark', 'light');
+				html.classList.add(theme);
+				body.classList.toggle('bg-gray-950', theme === 'dark');
+				body.classList.toggle('text-gray-100', theme === 'dark');
+				body.classList.toggle('bg-white', theme === 'light');
+				body.classList.toggle('text-gray-900', theme === 'light');
+				if (themeIcon) themeIcon.textContent = theme === 'light' ? '☀️' : '🌙';
+			}
+
+			applyTheme((localStorage.getItem('theme') || 'dark') === 'light' ? 'light' : 'dark');
+
+			themeToggle?.addEventListener('click', () => {
+				const nextTheme = html.classList.contains('dark') ? 'light' : 'dark';
+				applyTheme(nextTheme);
+				localStorage.setItem('theme', nextTheme);
+			});
+
+			const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+			const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+			const mobileMenuClose = document.getElementById('mobileMenuClose');
+			const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+			function openMobileMenu() {
+				mobileMenuOverlay?.classList.remove('hidden');
+				document.body.style.overflow = 'hidden';
+			}
+
+			function closeMobileMenu() {
+				mobileMenuOverlay?.classList.add('hidden');
+				document.body.style.overflow = '';
+			}
+
+			mobileMenuBtn?.addEventListener('click', openMobileMenu);
+			mobileMenuClose?.addEventListener('click', closeMobileMenu);
+			mobileMenuBackdrop?.addEventListener('click', closeMobileMenu);
+
+			let sessionCheckInterval;
+			let sessionBootstrapPromise = null;
+
+			function updateSessionBanner(data) {
+				const banner = document.getElementById('sessionBanner');
+				if (!banner) return;
+				const i18n = window.DataPulseI18n;
+				const locale = typeof i18n?.getLocale === 'function' ? i18n.getLocale() : getLocale();
+
+				const minutesLeft = Math.floor((data.timeRemaining || 0) / 60);
+
+				if (data.isAdmin) {
+					banner.innerHTML = `<span class="text-emerald-300 font-semibold">${i18n?.t?.('session.admin') ?? (locale === 'en' ? 'Admin session active' : 'Admin oturumu aktif')}</span>`;
+					return;
+				}
+
+				if (sessionMode === 'requests') {
+					const remaining = data.requestsRemaining ?? 0;
+					const label =
+						i18n?.t?.('session.requests', { count: remaining, minutes: minutesLeft }) ??
+						(locale === 'en' ? `${remaining} requests / ${minutesLeft} min` : `${remaining} istek / ${minutesLeft} dk`);
+					banner.innerHTML = remaining <= 10 ? `<span class="text-amber-300 font-semibold">${label}</span>` : label;
+					return;
+				}
+
+				if (sessionMode === 'scrapes') {
+					const remaining = data.scrapesRemaining ?? 0;
+					const label =
+						i18n?.t?.('session.scrapes', { count: remaining, minutes: minutesLeft }) ??
+						(locale === 'en' ? `${remaining} scrapes / ${minutesLeft} min` : `${remaining} scrape / ${minutesLeft} dk`);
+					banner.innerHTML = remaining <= 1 ? `<span class="text-amber-300 font-semibold">${label}</span>` : label;
+					return;
+				}
+
+				if (sessionMode === 'analysis') {
+					const remaining = data.seoAnalysesRemaining ?? 0;
+					const label =
+						i18n?.t?.('session.analysis', { count: remaining, minutes: minutesLeft }) ??
+						(locale === 'en' ? `${remaining} analyses / ${minutesLeft} min` : `${remaining} analiz / ${minutesLeft} dk`);
+					banner.innerHTML = remaining <= 1 ? `<span class="text-amber-300 font-semibold">${label}</span>` : label;
+					return;
+				}
+
+				banner.textContent =
+					i18n?.t?.('session.demoActive', { minutes: minutesLeft }) ??
+					(locale === 'en' ? `Demo active: ${minutesLeft} minutes left` : `Demo aktif: ${minutesLeft} dakika kaldı`);
+			}
+
+			function showSessionExpired() {
+				if (sessionCheckInterval) clearInterval(sessionCheckInterval);
+				document.getElementById('sessionExpiredModal')?.classList.remove('hidden');
+			}
+
+			async function ensureDemoSession() {
+				if (sessionBootstrapPromise) return sessionBootstrapPromise;
+
+				sessionBootstrapPromise = fetch(apiUrl('/api/session/start'), {
+					method: 'POST',
+					credentials: 'include',
+				})
+					.then(() => undefined)
+					.finally(() => {
+						sessionBootstrapPromise = null;
+					});
+
+				return sessionBootstrapPromise;
+			}
+
+			async function checkSessionStatus() {
+				try {
+					const response = await fetch(apiUrl('/api/session/status'), { credentials: 'include' });
+					const data = response.ok ? await parseJsonResponse(response) : null;
+
+					if (!data?.active) {
+						await ensureDemoSession();
+						const retryResponse = await fetch(apiUrl('/api/session/status'), { credentials: 'include' });
+						const retryData = retryResponse.ok ? await parseJsonResponse(retryResponse) : null;
+
+						if (!retryData?.active) {
+							showSessionExpired();
+							return;
+						}
+
+						updateSessionBanner(retryData);
+						return;
+					}
+
+					updateSessionBanner(data);
+				} catch (error) {
+					console.error('Failed to check session status:', error);
+				}
+			}
+
+			document.getElementById('restartDemoBtn')?.addEventListener('click', () => {
+				window.location.href = '/';
+			});
+
+			checkSessionStatus();
+			sessionCheckInterval = setInterval(checkSessionStatus, 30000);
+		</script>
+	</body>
+</html>

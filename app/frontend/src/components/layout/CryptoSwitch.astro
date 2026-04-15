@@ -1,0 +1,412 @@
+---
+interface Props {
+	variant?: 'cyber' | 'gruvbox';
+}
+
+const { variant = 'cyber' } = Astro.props;
+---
+
+<div class="crypto-switch-container" data-crypto-switch data-variant={variant}>
+	<button
+		id="switch-trigger"
+		class="crypto-switch-trigger"
+		type="button"
+		aria-label="Switch language"
+		aria-pressed="false"
+		data-switch-trigger
+	>
+		<span class="crypto-switch-corner crypto-switch-corner-tl" aria-hidden="true"></span>
+		<span class="crypto-switch-corner crypto-switch-corner-tr" aria-hidden="true"></span>
+		<span class="crypto-switch-corner crypto-switch-corner-bl" aria-hidden="true"></span>
+		<span class="crypto-switch-corner crypto-switch-corner-br" aria-hidden="true"></span>
+
+		<span class="crypto-switch-globe" aria-hidden="true">
+			<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+				<circle cx="12" cy="12" r="9"></circle>
+				<path d="M3 12h18"></path>
+				<path d="M12 3a15 15 0 0 1 0 18"></path>
+				<path d="M12 3a15 15 0 0 0 0 18"></path>
+			</svg>
+		</span>
+
+		<span class="crypto-switch-rail">
+			<span class="crypto-switch-actuator" data-switch-actuator aria-hidden="true">
+				<span class="crypto-switch-scan"></span>
+			</span>
+
+			<span class="crypto-switch-labels" aria-hidden="true">
+				<span class="crypto-switch-label is-active" data-switch-label="tr">TR</span>
+				<span class="crypto-switch-label" data-switch-label="en">EN</span>
+			</span>
+		</span>
+	</button>
+</div>
+
+<style>
+	.crypto-switch-container {
+		display: flex;
+		align-items: center;
+		gap: 0;
+		user-select: none;
+		font-family: "IBM Plex Mono", "SFMono-Regular", "Menlo", "Monaco", monospace;
+		color: #818cf8;
+	}
+
+	.crypto-switch-trigger {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.28rem;
+		padding: 0.24rem 0.32rem 0.24rem 0.28rem;
+		border: 1px solid rgba(49, 46, 129, 0.55);
+		background: #000000;
+		box-shadow:
+			0 0 8px rgba(0, 0, 0, 0.68),
+			inset 0 0 6px rgba(99, 102, 241, 0.08);
+		cursor: pointer;
+		transition: transform 150ms cubic-bezier(0.8, 0, 0.2, 1), border-color 150ms ease, box-shadow 150ms ease;
+	}
+
+	.crypto-switch-trigger:hover {
+		border-color: rgba(99, 102, 241, 0.68);
+		box-shadow:
+			0 0 12px rgba(0, 0, 0, 0.85),
+			inset 0 0 10px rgba(99, 102, 241, 0.12);
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] {
+		color: #fabd2f;
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-trigger {
+		border-color: rgba(250, 189, 47, 0.3);
+		background: linear-gradient(180deg, rgba(40, 40, 40, 0.98), rgba(29, 32, 33, 0.98));
+		box-shadow:
+			0 0 8px rgba(0, 0, 0, 0.7),
+			inset 0 0 6px rgba(250, 189, 47, 0.08);
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-trigger:hover {
+		border-color: rgba(250, 189, 47, 0.5);
+		box-shadow:
+			0 0 12px rgba(0, 0, 0, 0.88),
+			inset 0 0 10px rgba(250, 189, 47, 0.1);
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-globe {
+		color: rgba(235, 219, 178, 0.92);
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-rail {
+		border-color: rgba(235, 219, 178, 0.16);
+		background: #1d2021;
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-actuator {
+		border-left-color: #fe8019;
+		border-right-color: #fe8019;
+		background: rgba(250, 189, 47, 0.12);
+		box-shadow:
+			inset 0 0 10px rgba(250, 189, 47, 0.12),
+			0 0 8px rgba(250, 189, 47, 0.08);
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-label {
+		color: #7c6f64;
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-label.is-active {
+		color: #fabd2f;
+		text-shadow: 0 0 5px rgba(250, 189, 47, 0.55);
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-corner {
+		border-color: rgba(250, 189, 47, 0.45);
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-corner-tl,
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-corner-tr,
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-corner-bl,
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-corner-br {
+		border-color: rgba(250, 189, 47, 0.45);
+	}
+
+	.crypto-switch-trigger:focus-visible {
+		outline: 2px solid rgba(129, 140, 248, 0.75);
+		outline-offset: 2px;
+	}
+
+	.crypto-switch-container[data-variant='gruvbox'] .crypto-switch-trigger:focus-visible {
+		outline-color: rgba(250, 189, 47, 0.7);
+	}
+
+	.crypto-switch-corner {
+		position: absolute;
+		width: 0.35rem;
+		height: 0.35rem;
+		pointer-events: none;
+		border-color: rgba(99, 102, 241, 0.5);
+	}
+
+	.crypto-switch-globe {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 0.92rem;
+		height: 0.92rem;
+		color: rgba(148, 163, 184, 0.9);
+		flex: none;
+	}
+
+	.crypto-switch-globe svg {
+		width: 100%;
+		height: 100%;
+	}
+
+	.crypto-switch-corner-tl {
+		top: -0.125rem;
+		left: -0.125rem;
+		border-top: 1px solid;
+		border-left: 1px solid;
+	}
+
+	.crypto-switch-corner-tr {
+		top: -0.125rem;
+		right: -0.125rem;
+		border-top: 1px solid;
+		border-right: 1px solid;
+	}
+
+	.crypto-switch-corner-bl {
+		bottom: -0.125rem;
+		left: -0.125rem;
+		border-bottom: 1px solid;
+		border-left: 1px solid;
+	}
+
+	.crypto-switch-corner-br {
+		right: -0.125rem;
+		bottom: -0.125rem;
+		border-right: 1px solid;
+		border-bottom: 1px solid;
+	}
+
+	.crypto-switch-rail {
+		position: relative;
+		display: flex;
+		align-items: center;
+		width: 4.875rem;
+		height: 1.4625rem;
+		overflow: hidden;
+		border: 1px solid rgba(39, 39, 42, 0.84);
+		background: #09090b;
+	}
+
+	.crypto-switch-actuator {
+		position: absolute;
+		inset: 0 auto 0 0;
+		width: 2.4375rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-left: 1px solid #6366f1;
+		border-right: 1px solid #6366f1;
+		background: rgba(99, 102, 241, 0.12);
+		box-shadow:
+			inset 0 0 10px rgba(99, 102, 241, 0.14),
+			0 0 8px rgba(99, 102, 241, 0.08);
+		transition: transform 150ms cubic-bezier(0.8, 0, 0.2, 1);
+	}
+
+	.crypto-switch-scan {
+		width: 62%;
+		height: 1px;
+		background: rgba(129, 140, 248, 0.65);
+		opacity: 0.8;
+	}
+
+	.crypto-switch-labels {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		width: 100%;
+		height: 100%;
+		font-size: 0.56rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+	}
+
+	.crypto-switch-label {
+		display: flex;
+		flex: 1;
+		align-items: center;
+		justify-content: center;
+		color: #312e81;
+		transition: color 100ms ease, text-shadow 100ms ease, transform 100ms ease;
+	}
+
+	.crypto-switch-label.is-active {
+		color: #818cf8;
+		text-shadow: 0 0 5px rgba(99, 102, 241, 0.8);
+	}
+
+	.crypto-switch-trigger.is-en .crypto-switch-actuator {
+		transform: translateX(2.4375rem);
+	}
+
+	@media (max-width: 640px) {
+		.crypto-switch-rail {
+			width: 4.35rem;
+			height: 1.36rem;
+		}
+
+		.crypto-switch-actuator {
+			width: 2.175rem;
+		}
+
+		.crypto-switch-trigger.is-en .crypto-switch-actuator,
+		.crypto-switch-container[data-locale='en'] .crypto-switch-actuator {
+			transform: translateX(2.175rem);
+		}
+	}
+
+	:global(html.light) .crypto-switch-trigger {
+		border-color: rgba(99, 102, 241, 0.28);
+		background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(2, 6, 23, 0.98));
+	}
+
+	:global(html.light) .crypto-switch-label {
+		color: #475569;
+	}
+
+	:global(html.light) .crypto-switch-label.is-active {
+		color: #6366f1;
+	}
+</style>
+
+<script>
+	const root = document.querySelector('[data-crypto-switch]');
+
+	if (root) {
+		const trigger = root.querySelector('[data-switch-trigger]');
+		const actuator = root.querySelector('[data-switch-actuator]');
+		const labelTr = root.querySelector('[data-switch-label="tr"]');
+		const labelEn = root.querySelector('[data-switch-label="en"]');
+		const glyphs = '01#$&*@%X!?<>[]';
+		let isAnimating = false;
+		let currentLocale = 'tr';
+
+		function resolveLocale(rawLocale) {
+			return rawLocale === 'en' ? 'en' : 'tr';
+		}
+
+	function getLocale() {
+			const apiLocale = window.DataPulseI18n?.getLocale?.();
+			if (apiLocale === 'en' || apiLocale === 'tr') {
+				return apiLocale;
+			}
+
+			const storedLocale = localStorage.getItem('dp-locale');
+			if (storedLocale === 'en' || storedLocale === 'tr') {
+				return storedLocale;
+			}
+
+		return navigator.language?.toLowerCase().startsWith('tr') ? 'tr' : 'en';
+	}
+
+	function cypherEffect(element, finalString, duration = 250) {
+			if (!element) return;
+			const start = performance.now();
+
+			function update(time) {
+				const progress = (time - start) / duration;
+
+				if (progress < 1) {
+					let randomStr = '';
+					for (let index = 0; index < finalString.length; index += 1) {
+						randomStr += glyphs[Math.floor(Math.random() * glyphs.length)];
+					}
+					element.textContent = randomStr;
+					requestAnimationFrame(update);
+					return;
+				}
+
+				element.textContent = finalString;
+			}
+
+			requestAnimationFrame(update);
+		}
+
+		function renderState(locale, options = {}) {
+			currentLocale = resolveLocale(locale);
+
+			if (root) {
+				root.dataset.locale = currentLocale;
+			}
+
+			if (trigger) {
+				trigger.setAttribute('aria-pressed', currentLocale === 'en' ? 'true' : 'false');
+			}
+
+			if (actuator) {
+				actuator.style.transform = currentLocale === 'en' ? 'translateX(2.4375rem)' : 'translateX(0)';
+			}
+
+			if (labelTr) {
+				labelTr.classList.toggle('is-active', currentLocale === 'tr');
+			}
+
+			if (labelEn) {
+				labelEn.classList.toggle('is-active', currentLocale === 'en');
+			}
+
+			if (options.scrambleLabels) {
+				cypherEffect(labelTr, 'TR', 220);
+				cypherEffect(labelEn, 'EN', 220);
+			} else {
+				if (labelTr) labelTr.textContent = 'TR';
+				if (labelEn) labelEn.textContent = 'EN';
+			}
+		}
+
+		function emitLocale(locale) {
+			const api = window.DataPulseI18n;
+			if (typeof api?.setLocale === 'function') {
+				api.setLocale(locale);
+				return;
+			}
+
+			document.documentElement.lang = locale;
+			localStorage.setItem('dp-locale', locale);
+			window.dispatchEvent(new CustomEvent('datapulse:localechange', { detail: { locale } }));
+		}
+
+		function handleLocaleChange(event) {
+			currentLocale = resolveLocale(event?.detail?.locale ?? localStorage.getItem('dp-locale'));
+			if (isAnimating) return;
+			renderState(currentLocale);
+		}
+
+		function handleSwitch() {
+			if (isAnimating) return;
+
+			isAnimating = true;
+			const nextLocale = currentLocale === 'en' ? 'tr' : 'en';
+			currentLocale = nextLocale;
+
+			renderState(nextLocale, { scrambleLabels: true });
+
+			emitLocale(nextLocale);
+
+			window.setTimeout(() => {
+				renderState(currentLocale);
+				isAnimating = false;
+			}, 300);
+		}
+
+		trigger?.addEventListener('click', handleSwitch);
+		window.addEventListener('datapulse:localechange', handleLocaleChange);
+		currentLocale = getLocale();
+		renderState(currentLocale);
+	}
+</script>

@@ -1,0 +1,21 @@
+{
+  "name": "datapulse-root",
+  "private": true,
+  "packageManager": "bun@1.3.0",
+  "scripts": {
+    "dev": "cd app && bun run dev",
+    "dev:frontend": "cd app/frontend && bun run dev",
+    "dev:backend": "cd app/backend && bun run dev",
+    "dev:backend-rust": "cd app/backend-rust && cargo run",
+    "dev:backend-rust:replace-hono": "cd app/backend-rust && PORT=8321 cargo run",
+    "build": "cd app && bun run build",
+    "build:frontend": "cd app/frontend && bun run build",
+    "preview": "cd app && bun run preview",
+    "start:backend": "cd app/backend && bun --smol run start",
+    "start:backend-rust": "cd app/backend-rust && cargo run --release",
+    "start:backend-rust:replace-hono": "cd app/backend-rust && PORT=8321 cargo run --release",
+    "legacy:dev": "cd frontend && bun run dev",
+    "legacy:build": "cd frontend && bun run build",
+    "legacy:check": "cd frontend && bun run check"
+  }
+}

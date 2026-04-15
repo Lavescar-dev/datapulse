@@ -1,0 +1,436 @@
+{
+  "dashboards": [
+    {
+      "name": "My Crypto Dashboard",
+      "description": "Comprehensive cryptocurrency dashboard with market data, prices, news, and social sentiment",
+      "widgets": [
+        {
+          "id": "crypto-fear-greed",
+          "type": "stat",
+          "source": "crypto",
+          "title": "Fear & Greed Index",
+          "description": "Current market sentiment indicator",
+          "x": 0,
+          "y": 0,
+          "w": 4,
+          "h": 2,
+          "dataKey": "fearGreedIndex",
+          "color": "#f59e0b",
+          "showHeader": true
+        },
+        {
+          "id": "crypto-market-cap",
+          "type": "stat",
+          "source": "crypto",
+          "title": "Total Market Cap",
+          "description": "Global cryptocurrency market capitalization",
+          "x": 4,
+          "y": 0,
+          "w": 4,
+          "h": 2,
+          "dataKey": "marketStats",
+          "color": "#3b82f6",
+          "showHeader": true
+        },
+        {
+          "id": "crypto-top-coins-chart",
+          "type": "chart",
+          "source": "crypto",
+          "title": "Top Cryptocurrencies",
+          "description": "Market cap comparison",
+          "x": 8,
+          "y": 0,
+          "w": 4,
+          "h": 2,
+          "chartType": "bar",
+          "limit": 10,
+          "color": "#8b5cf6",
+          "showHeader": true
+        },
+        {
+          "id": "crypto-price-table",
+          "type": "table",
+          "source": "crypto",
+          "title": "Live Crypto Prices",
+          "description": "Real-time cryptocurrency prices and 24h changes",
+          "x": 0,
+          "y": 2,
+          "w": 12,
+          "h": 4,
+          "limit": 15,
+          "showHeader": true
+        },
+        {
+          "id": "crypto-news-feed",
+          "type": "list",
+          "source": "news",
+          "title": "Crypto News",
+          "description": "Latest cryptocurrency news",
+          "x": 0,
+          "y": 6,
+          "w": 6,
+          "h": 3,
+          "limit": 8,
+          "filters": {
+            "category": "Crypto"
+          },
+          "showHeader": true
+        },
+        {
+          "id": "crypto-social-feed",
+          "type": "list",
+          "source": "social",
+          "title": "Trending on Reddit",
+          "description": "Hot crypto discussions",
+          "x": 6,
+          "y": 6,
+          "w": 6,
+          "h": 3,
+          "limit": 8,
+          "filters": {
+            "platform": "Reddit"
+          },
+          "showHeader": true
+        }
+      ],
+      "createdBy": "demo",
+      "id": "dashboard-1770740191743-ijhgg7h",
+      "createdAt": "2026-02-10T16:16:31.743Z",
+      "updatedAt": "2026-02-10T16:16:31.743Z"
+    },
+    {
+      "name": "Updated Custom Dashboard",
+      "description": "Updated description",
+      "widgets": [
+        {
+          "id": "test-widget-2",
+          "type": "chart",
+          "source": "news",
+          "title": "News Chart",
+          "x": 4,
+          "y": 0,
+          "w": 6,
+          "h": 3,
+          "chartType": "line",
+          "limit": 10
+        }
+      ],
+      "createdBy": "admin",
+      "id": "dashboard-1770740191743-eanr2jb",
+      "createdAt": "2026-02-10T16:16:31.743Z",
+      "updatedAt": "2026-02-10T16:16:31.744Z"
+    },
+    {
+      "name": "Cloned Dashboard",
+      "description": "Updated description",
+      "widgets": [
+        {
+          "id": "test-widget-2",
+          "type": "chart",
+          "source": "news",
+          "title": "News Chart",
+          "x": 4,
+          "y": 0,
+          "w": 6,
+          "h": 3,
+          "chartType": "line",
+          "limit": 10
+        }
+      ],
+      "isTemplate": false,
+      "createdBy": "demo",
+      "id": "dashboard-1770740191749-ze8jct4",
+      "createdAt": "2026-02-10T16:16:31.749Z",
+      "updatedAt": "2026-02-10T16:16:31.749Z"
+    },
+    {
+      "name": "Updated Custom Dashboard",
+      "description": "Updated description",
+      "widgets": [
+        {
+          "id": "test-widget-2",
+          "type": "chart",
+          "source": "news",
+          "title": "News Chart",
+          "x": 4,
+          "y": 0,
+          "w": 6,
+          "h": 3,
+          "chartType": "line",
+          "limit": 10
+        }
+      ],
+      "isTemplate": false,
+      "createdBy": "admin",
+      "id": "dashboard-1770740191750-p3sg35p",
+      "createdAt": "2026-02-10T16:16:31.750Z",
+      "updatedAt": "2026-02-10T16:16:31.750Z"
+    },
+    {
+      "name": "My Crypto Dashboard",
+      "description": "Comprehensive cryptocurrency dashboard with market data, prices, news, and social sentiment",
+      "widgets": [
+        {
+          "id": "crypto-fear-greed",
+          "type": "stat",
+          "source": "crypto",
+          "title": "Fear & Greed Index",
+          "description": "Current market sentiment indicator",
+          "x": 0,
+          "y": 0,
+          "w": 4,
+          "h": 2,
+          "dataKey": "fearGreedIndex",
+          "color": "#f59e0b",
+          "showHeader": true
+        },
+        {
+          "id": "crypto-market-cap",
+          "type": "stat",
+          "source": "crypto",
+          "title": "Total Market Cap",
+          "description": "Global cryptocurrency market capitalization",
+          "x": 4,
+          "y": 0,
+          "w": 4,
+          "h": 2,
+          "dataKey": "marketStats",
+          "color": "#3b82f6",
+          "showHeader": true
+        },
+        {
+          "id": "crypto-top-coins-chart",
+          "type": "chart",
+          "source": "crypto",
+          "title": "Top Cryptocurrencies",
+          "description": "Market cap comparison",
+          "x": 8,
+          "y": 0,
+          "w": 4,
+          "h": 2,
+          "chartType": "bar",
+          "limit": 10,
+          "color": "#8b5cf6",
+          "showHeader": true
+        },
+        {
+          "id": "crypto-price-table",
+          "type": "table",
+          "source": "crypto",
+          "title": "Live Crypto Prices",
+          "description": "Real-time cryptocurrency prices and 24h changes",
+          "x": 0,
+          "y": 2,
+          "w": 12,
+          "h": 4,
+          "limit": 15,
+          "showHeader": true
+        },
+        {
+          "id": "crypto-news-feed",
+          "type": "list",
+          "source": "news",
+          "title": "Crypto News",
+          "description": "Latest cryptocurrency news",
+          "x": 0,
+          "y": 6,
+          "w": 6,
+          "h": 3,
+          "limit": 8,
+          "filters": {
+            "category": "Crypto"
+          },
+          "showHeader": true
+        },
+        {
+          "id": "crypto-social-feed",
+          "type": "list",
+          "source": "social",
+          "title": "Trending on Reddit",
+          "description": "Hot crypto discussions",
+          "x": 6,
+          "y": 6,
+          "w": 6,
+          "h": 3,
+          "limit": 8,
+          "filters": {
+            "platform": "Reddit"
+          },
+          "showHeader": true
+        }
+      ],
+      "createdBy": "demo",
+      "id": "dashboard-1770740212962-0l23vrt",
+      "createdAt": "2026-02-10T16:16:52.962Z",
+      "updatedAt": "2026-02-10T16:16:52.962Z"
+    },
+    {
+      "name": "Updated Custom Dashboard",
+      "description": "Updated description",
+      "widgets": [
+        {
+          "id": "test-widget-2",
+          "type": "chart",
+          "source": "news",
+          "title": "News Chart",
+          "x": 4,
+          "y": 0,
+          "w": 6,
+          "h": 3,
+          "chartType": "line",
+          "limit": 10
+        }
+      ],
+      "createdBy": "admin",
+      "id": "dashboard-1770740212962-h6f9kbd",
+      "createdAt": "2026-02-10T16:16:52.962Z",
+      "updatedAt": "2026-02-10T16:16:52.963Z"
+    },
+    {
+      "name": "Cloned Dashboard",
+      "description": "Updated description",
+      "widgets": [
+        {
+          "id": "test-widget-2",
+          "type": "chart",
+          "source": "news",
+          "title": "News Chart",
+          "x": 4,
+          "y": 0,
+          "w": 6,
+          "h": 3,
+          "chartType": "line",
+          "limit": 10
+        }
+      ],
+      "isTemplate": false,
+      "createdBy": "demo",
+      "id": "dashboard-1770740212967-yyx3xdz",
+      "createdAt": "2026-02-10T16:16:52.967Z",
+      "updatedAt": "2026-02-10T16:16:52.967Z"
+    },
+    {
+      "name": "Updated Custom Dashboard",
+      "description": "Updated description",
+      "widgets": [
+        {
+          "id": "test-widget-2",
+          "type": "chart",
+          "source": "news",
+          "title": "News Chart",
+          "x": 4,
+          "y": 0,
+          "w": 6,
+          "h": 3,
+          "chartType": "line",
+          "limit": 10
+        }
+      ],
+      "isTemplate": false,
+      "createdBy": "admin",
+      "id": "dashboard-1770740212967-fuk6ciz",
+      "createdAt": "2026-02-10T16:16:52.967Z",
+      "updatedAt": "2026-02-10T16:16:52.967Z"
+    },
+    {
+      "name": "Crypto Overview",
+      "description": "Comprehensive cryptocurrency dashboard with market data, prices, news, and social sentiment",
+      "widgets": [
+        {
+          "id": "crypto-fear-greed",
+          "type": "stat",
+          "source": "crypto",
+          "title": "Fear & Greed Index",
+          "description": "Current market sentiment indicator",
+          "x": 0,
+          "y": 0,
+          "w": 4,
+          "h": 2,
+          "dataKey": "fearGreedIndex",
+          "color": "#f59e0b",
+          "showHeader": true
+        },
+        {
+          "id": "crypto-market-cap",
+          "type": "stat",
+          "source": "crypto",
+          "title": "Total Market Cap",
+          "description": "Global cryptocurrency market capitalization",
+          "x": 4,
+          "y": 0,
+          "w": 4,
+          "h": 2,
+          "dataKey": "marketStats",
+          "color": "#3b82f6",
+          "showHeader": true
+        },
+        {
+          "id": "crypto-top-coins-chart",
+          "type": "chart",
+          "source": "crypto",
+          "title": "Top Cryptocurrencies",
+          "description": "Market cap comparison",
+          "x": 8,
+          "y": 0,
+          "w": 4,
+          "h": 2,
+          "chartType": "bar",
+          "limit": 10,
+          "color": "#8b5cf6",
+          "showHeader": true
+        },
+        {
+          "id": "crypto-price-table",
+          "type": "table",
+          "source": "crypto",
+          "title": "Live Crypto Prices",
+          "description": "Real-time cryptocurrency prices and 24h changes",
+          "x": 0,
+          "y": 2,
+          "w": 12,
+          "h": 4,
+          "limit": 15,
+          "showHeader": true
+        },
+        {
+          "id": "crypto-news-feed",
+          "type": "list",
+          "source": "news",
+          "title": "Crypto News",
+          "description": "Latest cryptocurrency news",
+          "x": 0,
+          "y": 6,
+          "w": 6,
+          "h": 3,
+          "limit": 8,
+          "filters": {
+            "category": "Crypto"
+          },
+          "showHeader": true
+        },
+        {
+          "id": "crypto-social-feed",
+          "type": "list",
+          "source": "social",
+          "title": "Trending on Reddit",
+          "description": "Hot crypto discussions",
+          "x": 6,
+          "y": 6,
+          "w": 6,
+          "h": 3,
+          "limit": 8,
+          "filters": {
+            "platform": "Reddit"
+          },
+          "showHeader": true
+        }
+      ],
+      "isTemplate": false,
+      "createdBy": "demo",
+      "id": "dashboard-1774230685777-2dtqapw",
+      "createdAt": "2026-03-23T01:51:25.777Z",
+      "updatedAt": "2026-03-23T01:51:25.777Z"
+    }
+  ],
+  "lastUpdated": 1774230685777
+}

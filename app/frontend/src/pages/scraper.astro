@@ -1,0 +1,22 @@
+---
+import AppShell from '../layouts/AppShell.astro';
+import ScraperMain from '../components/scraper/ScraperMain';
+---
+
+<AppShell
+	title="Web Kazıyıcı - DataPulse"
+	titleI18nKey="page.scraper"
+	activePage="scraper"
+	eyebrow="Kazıyıcı"
+	heroTitle="Web Kazıyıcı"
+	heroDescription="Kaynak tarama, selector doğrulama ve sonuç inceleme akışı"
+	showHero={false}
+	sessionMode="scrapes"
+	mainClass="dashboard-shell py-4 sm:py-6 xl:py-8"
+	containerClass="mx-auto w-full max-w-[1180px]"
+	accent="#4ade80"
+	accentSoft="rgba(74, 222, 128, 0.18)"
+	metrics={[]}
+>
+	<ScraperMain client:only="solid-js" />
+</AppShell>
