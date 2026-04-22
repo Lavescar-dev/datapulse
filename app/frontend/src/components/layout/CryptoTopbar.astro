@@ -1,22 +1,32 @@
 ---
 import { defaultLocale, i18nMessages } from '../../lib/i18n';
+import { buildDemoAccessHref, demoTargets } from '../../lib/demoAccess';
 import CryptoSwitch from './CryptoSwitch.astro';
 
-interface NavItem {
+interface ModuleNavItem {
 	href: string;
 	label: string;
 	key: string;
 	i18nKey: string;
 }
 
+interface LandingNavItem {
+	href: string;
+	key: string;
+	labelTr: string;
+	labelEn: string;
+}
+
 interface Props {
 	activePage: string;
 	switchVariant?: 'cyber' | 'gruvbox';
+	navMode?: 'landing' | 'app';
 }
 
-const { activePage, switchVariant = 'cyber' } = Astro.props;
+const { activePage, switchVariant = 'cyber', navMode = 'app' } = Astro.props;
+const isLandingNav = navMode === 'landing';
 
-const navItems: NavItem[] = [
+const moduleNavItems: ModuleNavItem[] = [
 	{ href: '/dashboard', label: 'Kripto', key: 'dashboard', i18nKey: 'nav.dashboard' },
 	{ href: '/news', label: 'Haberler', key: 'news', i18nKey: 'nav.news' },
 	{ href: '/social', label: 'Sosyal Medya', key: 'social', i18nKey: 'nav.social' },
@@ -26,9 +36,17 @@ const navItems: NavItem[] = [
 	{ href: '/api-monitor', label: 'API', key: 'api-monitor', i18nKey: 'nav.apiMonitor' },
 	{ href: '/dashboard-builder', label: 'Dashboard', key: 'dashboard-builder', i18nKey: 'nav.dashboardBuilder' },
 ];
+
+const landingNavItems: LandingNavItem[] = [
+	{ href: '#overview', key: 'overview', labelTr: 'Genel Bakış', labelEn: 'Overview' },
+	{ href: '#modules', key: 'modules', labelTr: 'Modüller', labelEn: 'Modules' },
+	{ href: '#access', key: 'access', labelTr: 'Erişim', labelEn: 'Access' },
+];
+
+const landingCtaHref = buildDemoAccessHref('/dashboard');
 ---
 
-<header class="shell-topbar sticky top-0 z-50 border-b border-gray-800 bg-gray-900">
+<header class:list={['shell-topbar sticky top-0 z-50 border-b border-gray-800 bg-gray-900', isLandingNav && 'shell-topbar--landing']}>
 	<div class="dashboard-shell shell-topbar-inner py-4">
 		<div class="flex items-center justify-between gap-4">
 			<div class="flex items-center gap-4">
@@ -42,28 +60,61 @@ const navItems: NavItem[] = [
 					</svg>
 				</button>
 				<a
-					href="/"
-					class="shell-topbar-brand bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-xl font-bold text-transparent transition-opacity hover:opacity-80 md:text-2xl"
+					href={isLandingNav ? '#overview' : '/'}
+					class:list={[
+						'shell-topbar-brand bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-xl font-bold text-transparent transition-opacity hover:opacity-80 md:text-2xl',
+						isLandingNav && 'shell-topbar-brand--landing'
+					]}
 				>
 					DataPulse
 				</a>
-				<nav class="hidden flex-wrap gap-4 md:flex">
-					{navItems.map((item) => (
-						<a
-							href={item.href}
-							data-i18n={item.i18nKey}
-							class:list={[
-								'shell-topbar-link text-sm transition-colors',
-								activePage === item.key ? 'font-medium text-blue-400' : 'text-gray-400 hover:text-gray-100',
-							]}
-						>
-							{item.label}
-						</a>
-					))}
-				</nav>
+				{isLandingNav ? (
+					<>
+						<div class="hidden items-center gap-2 xl:flex">
+							<span class="shell-topbar-kicker">{demoTargets.length} modül</span>
+							<span class="shell-topbar-kicker" data-i18n-en="Gated live access">Canlı demo erişimi</span>
+						</div>
+						<nav class="hidden flex-wrap items-center gap-2 md:flex">
+							{landingNavItems.map((item) => (
+								<a
+									href={item.href}
+									data-i18n-en={item.labelEn}
+									class="shell-topbar-link shell-topbar-link--landing text-sm text-gray-300 transition-colors hover:text-white"
+								>
+									{item.labelTr}
+								</a>
+							))}
+						</nav>
+					</>
+				) : (
+					<nav class="hidden flex-wrap gap-4 md:flex">
+						{moduleNavItems.map((item) => (
+							<a
+								href={item.href}
+								data-i18n={item.i18nKey}
+								class:list={[
+									'shell-topbar-link text-sm transition-colors',
+									activePage === item.key ? 'font-medium text-blue-400' : 'text-gray-400 hover:text-gray-100',
+								]}
+							>
+								{item.label}
+							</a>
+						))}
+					</nav>
+				)}
 			</div>
 			<div class="flex items-center gap-2">
-				<slot name="headerActions" />
+				{isLandingNav ? (
+					<a
+						href={landingCtaHref}
+						class="shell-topbar-cta hidden sm:inline-flex"
+						data-i18n-en="Open Demo Platform"
+					>
+						Demo Platformunu Aç
+					</a>
+				) : (
+					<slot name="headerActions" />
+				)}
 				<CryptoSwitch variant={switchVariant} />
 			</div>
 		</div>
@@ -88,23 +139,255 @@ const navItems: NavItem[] = [
 			</button>
 		</div>
 		<nav class="space-y-2 p-4">
-			{navItems.map((item) => (
-				<a
-					href={item.href}
-					data-i18n={item.i18nKey}
-					class:list={[
-						'block rounded-lg px-4 py-3 transition-colors',
-						activePage === item.key
-							? 'bg-blue-400/10 font-medium text-blue-400'
-							: 'text-gray-300 hover:bg-gray-800',
-					]}
-				>
-					{item.label}
-				</a>
-			))}
+			{isLandingNav
+				? landingNavItems.map((item) => (
+						<a
+							href={item.href}
+							data-close-mobile-menu
+							data-i18n-en={item.labelEn}
+							class="block border border-transparent px-4 py-3 text-gray-300 transition-colors hover:border-gray-800 hover:bg-gray-800"
+						>
+							{item.labelTr}
+						</a>
+					))
+				: moduleNavItems.map((item) => (
+						<a
+							href={item.href}
+							data-i18n={item.i18nKey}
+							class:list={[
+								'block border border-transparent px-4 py-3 transition-colors',
+								activePage === item.key
+									? 'border-blue-400/20 bg-blue-400/10 font-medium text-blue-400'
+									: 'text-gray-300 hover:border-gray-800 hover:bg-gray-800',
+							]}
+						>
+							{item.label}
+						</a>
+					))}
 		</nav>
+		{isLandingNav && (
+			<div class="border-t border-gray-800 p-4">
+				<a
+					href={landingCtaHref}
+					data-i18n-en="Open Demo Platform"
+					class="shell-topbar-cta flex w-full items-center justify-center"
+				>
+					Demo Platformunu Aç
+				</a>
+			</div>
+		)}
 	</div>
 </div>
+
+<script define:vars={{ demoTargets }}>
+	const STORAGE_KEY = 'datapulse:demo-access';
+	const ACCESS_TTL_MS = 8 * 60 * 60 * 1000;
+
+	function hasWindow() {
+		return typeof window !== 'undefined';
+	}
+
+	function parseJsonText(text) {
+		if (!text || !text.trim()) {
+			return null;
+		}
+
+		try {
+			return JSON.parse(text);
+		} catch {
+			return null;
+		}
+	}
+
+	function apiUrl(path, publicApiBaseUrl = '') {
+		return publicApiBaseUrl ? new URL(path, publicApiBaseUrl).toString() : path;
+	}
+
+	function normalizeTargetPath(targetPath) {
+		if (!targetPath) {
+			return '/dashboard';
+		}
+
+		try {
+			const url = new URL(targetPath, 'https://datapulse.local');
+			return url.pathname || '/dashboard';
+		} catch {
+			return targetPath.split('?')[0] || '/dashboard';
+		}
+	}
+
+	function createDemoAccessSession(draft) {
+		return {
+			accessId: `dp-demo-${Math.random().toString(36).slice(2, 10)}`,
+			name: draft.name.trim(),
+			email: draft.email.trim(),
+			role: draft.role.trim(),
+			organization: draft.organization.trim(),
+			startedAt: new Date().toISOString(),
+		};
+	}
+
+	function readDemoAccessSession() {
+		if (!hasWindow()) {
+			return null;
+		}
+
+		try {
+			const raw = window.sessionStorage.getItem(STORAGE_KEY);
+			if (!raw) {
+				return null;
+			}
+
+			const parsed = JSON.parse(raw);
+			if (
+				typeof parsed !== 'object' ||
+				typeof parsed?.accessId !== 'string' ||
+				typeof parsed?.name !== 'string' ||
+				typeof parsed?.email !== 'string' ||
+				typeof parsed?.role !== 'string' ||
+				typeof parsed?.organization !== 'string' ||
+				typeof parsed?.startedAt !== 'string'
+			) {
+				window.sessionStorage.removeItem(STORAGE_KEY);
+				return null;
+			}
+
+			const startedAt = new Date(parsed.startedAt);
+			if (Number.isNaN(startedAt.getTime()) || Date.now() - startedAt.getTime() > ACCESS_TTL_MS) {
+				window.sessionStorage.removeItem(STORAGE_KEY);
+				return null;
+			}
+
+			return parsed;
+		} catch {
+			window.sessionStorage.removeItem(STORAGE_KEY);
+			return null;
+		}
+	}
+
+	function writeDemoAccessSession(session) {
+		if (!hasWindow()) {
+			return;
+		}
+
+		window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+	}
+
+	function clearDemoAccessSession() {
+		if (!hasWindow()) {
+			return;
+		}
+
+		window.sessionStorage.removeItem(STORAGE_KEY);
+	}
+
+	function buildDemoAccessHref(targetPath) {
+		const params = new URLSearchParams();
+		params.set('next', targetPath || '/dashboard');
+		return `/demo-access?${params.toString()}`;
+	}
+
+	function getRequestedTarget(search, fallback = '/dashboard') {
+		const params = new URLSearchParams(search);
+		const next = params.get('next');
+
+		if (!next || !next.startsWith('/') || next === '/demo-access') {
+			return fallback;
+		}
+
+		return next;
+	}
+
+	function getDemoTarget(targetPath) {
+		const normalizedTarget = normalizeTargetPath(targetPath);
+		return demoTargets.find((target) => target.href === normalizedTarget) ?? demoTargets[0];
+	}
+
+	function getCurrentTargetPath() {
+		if (!hasWindow()) {
+			return '/dashboard';
+		}
+
+		return normalizeTargetPath(`${window.location.pathname}${window.location.search}`);
+	}
+
+	function redirectToDemoAccess(targetPath, replace = true) {
+		if (!hasWindow()) {
+			return;
+		}
+
+		const href = buildDemoAccessHref(targetPath);
+		if (replace) {
+			window.location.replace(href);
+			return;
+		}
+
+		window.location.href = href;
+	}
+
+	async function startBackendDemoSession(publicApiBaseUrl = '') {
+		const response = await fetch(apiUrl('/api/session/start', publicApiBaseUrl), {
+			method: 'POST',
+			credentials: 'include',
+		});
+		const text = await response.text();
+		const data = parseJsonText(text);
+
+		if (!response.ok || !data?.success) {
+			throw new Error(data?.error || 'Demo oturumu başlatılamadı.');
+		}
+
+		return data;
+	}
+
+	async function fetchBackendSessionStatus(publicApiBaseUrl = '') {
+		const response = await fetch(apiUrl('/api/session/status', publicApiBaseUrl), {
+			credentials: 'include',
+		});
+		const text = await response.text();
+		const data = parseJsonText(text);
+		return response.ok ? data : null;
+	}
+
+window.DataPulseDemoAccess = {
+	buildDemoAccessHref,
+	clearDemoAccessSession,
+	createDemoAccessSession,
+		demoTargets,
+		fetchBackendSessionStatus,
+		getCurrentTargetPath,
+		getDemoTarget,
+		getRequestedTarget,
+		readDemoAccessSession,
+		redirectToDemoAccess,
+		startBackendDemoSession,
+	writeDemoAccessSession,
+};
+</script>
+
+<script>
+	const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+	const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+	const mobileMenuClose = document.getElementById('mobileMenuClose');
+	const mobileMenuBackdrop = document.getElementById('mobileMenuBackdrop');
+
+	function openMobileMenu() {
+		mobileMenuOverlay?.classList.remove('hidden');
+		document.body.style.overflow = 'hidden';
+	}
+
+	function closeMobileMenu() {
+		mobileMenuOverlay?.classList.add('hidden');
+		document.body.style.overflow = '';
+	}
+
+	mobileMenuBtn?.addEventListener('click', openMobileMenu);
+	mobileMenuClose?.addEventListener('click', closeMobileMenu);
+	mobileMenuBackdrop?.addEventListener('click', closeMobileMenu);
+	document.querySelectorAll('[data-close-mobile-menu]').forEach((element) => {
+		element.addEventListener('click', closeMobileMenu);
+	});
+</script>
 
 <script define:vars={{ defaultLocale, i18nMessages }}>
 	function resolveLocale(rawLocale) {

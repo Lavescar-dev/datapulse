@@ -14,7 +14,7 @@ const publicApiBaseUrl = import.meta.env.PUBLIC_DATAPULSE_API_BASE_URL || '';
 		<meta name="generator" content={Astro.generator} />
 		<title data-i18n="title" data-i18n-en="Social - DataPulse">Sosyal Medya - DataPulse</title>
 	</head>
-	<body class="dp-social-page min-h-screen">
+	<body class="dp-social-page min-h-screen" data-public-api-base-url={publicApiBaseUrl}>
 		<CryptoTopbar activePage="social" />
 
 		<main class="dp-social-shell">
@@ -34,25 +34,14 @@ const publicApiBaseUrl = import.meta.env.PUBLIC_DATAPULSE_API_BASE_URL || '';
 			</div>
 		</div>
 
-		<script define:vars={{ publicApiBaseUrl }}>
-			function apiUrl(path) {
-				return publicApiBaseUrl ? new URL(path, publicApiBaseUrl).toString() : path;
-			}
-
-			async function parseJsonResponse(response) {
-				const text = await response.text();
-
-				if (!text.trim()) {
-					return null;
-				}
-
-				try {
-					return JSON.parse(text);
-				} catch (error) {
-					console.warn('Received invalid JSON response.', error);
-					return null;
-				}
-			}
+		<script>
+			const {
+				fetchBackendSessionStatus,
+				getCurrentTargetPath,
+				readDemoAccessSession,
+				redirectToDemoAccess,
+			} = window.DataPulseDemoAccess;
+			const publicApiBaseUrl = document.body.dataset.publicApiBaseUrl || '';
 
 			function getLocale() {
 				const storedLocale = localStorage.getItem('dp-locale');
@@ -74,7 +63,11 @@ const publicApiBaseUrl = import.meta.env.PUBLIC_DATAPULSE_API_BASE_URL || '';
 			}
 
 			let sessionCheckInterval;
-			let sessionBootstrapPromise = null;
+			const currentTargetPath = getCurrentTargetPath();
+
+			if (!readDemoAccessSession()) {
+				redirectToDemoAccess(currentTargetPath);
+			}
 
 			function setBannerState(state: 'normal' | 'warning' | 'danger') {
 				const banner = document.getElementById('sessionBanner');
@@ -118,21 +111,6 @@ const publicApiBaseUrl = import.meta.env.PUBLIC_DATAPULSE_API_BASE_URL || '';
 				document.getElementById('sessionExpiredModal')?.classList.remove('hidden');
 			}
 
-			async function ensureDemoSession() {
-				if (sessionBootstrapPromise) return sessionBootstrapPromise;
-
-				sessionBootstrapPromise = fetch(apiUrl('/api/session/start'), {
-					method: 'POST',
-					credentials: 'include',
-				})
-					.then(() => undefined)
-					.finally(() => {
-						sessionBootstrapPromise = null;
-					});
-
-				return sessionBootstrapPromise;
-			}
-
 			const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 			const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
 			const mobileMenuClose = document.getElementById('mobileMenuClose');
@@ -154,24 +132,15 @@ const publicApiBaseUrl = import.meta.env.PUBLIC_DATAPULSE_API_BASE_URL || '';
 
 			async function checkSessionStatus() {
 				try {
-					const response = await fetch(apiUrl('/api/session/status'), {
-						credentials: 'include',
-					});
-					const data = response.ok ? await parseJsonResponse(response) : null;
+					if (!readDemoAccessSession()) {
+						redirectToDemoAccess(currentTargetPath);
+						return;
+					}
+
+					const data = await fetchBackendSessionStatus(publicApiBaseUrl);
 
 					if (!data?.active) {
-						await ensureDemoSession();
-						const retryResponse = await fetch(apiUrl('/api/session/status'), {
-							credentials: 'include',
-						});
-						const retryData = retryResponse.ok ? await parseJsonResponse(retryResponse) : null;
-
-						if (!retryData?.active) {
-							showSessionExpired();
-							return;
-						}
-
-						updateSessionBanner(retryData);
+						showSessionExpired();
 						return;
 					}
 
@@ -182,7 +151,7 @@ const publicApiBaseUrl = import.meta.env.PUBLIC_DATAPULSE_API_BASE_URL || '';
 			}
 
 			document.getElementById('restartDemoBtn')?.addEventListener('click', () => {
-				window.location.href = '/';
+				redirectToDemoAccess(currentTargetPath, false);
 			});
 
 			checkSessionStatus();

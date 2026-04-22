@@ -1,91 +1,7 @@
 ---
 import '../styles/global.css';
 import CryptoTopbar from '../components/layout/CryptoTopbar.astro';
-
-const publicApiBaseUrl = import.meta.env.PUBLIC_DATAPULSE_API_BASE_URL || '';
-
-const modules = [
-	{
-		accent: '#00C2FF',
-		accentRgb: '0, 194, 255',
-		descEn: 'Live price tracking for the top 100 crypto assets and BTC dominance.',
-		descTr: 'Top 100 kripto para anlık fiyat takibi ve BTC dominansı.',
-		href: '/dashboard',
-		icon: 'bar-chart-2',
-		titleEn: 'Crypto Tracking',
-		titleTr: 'Kripto Takip',
-	},
-	{
-		accent: '#7B61FF',
-		accentRgb: '123, 97, 255',
-		descEn: 'Collect financial news and run algorithmic sentiment analysis.',
-		descTr: 'Finans haberlerini toplayın, algoritmik duygu analizi yapın.',
-		href: '/news',
-		icon: 'globe',
-		titleEn: 'News Aggregation',
-		titleTr: 'Haber Toplama',
-	},
-	{
-		accent: '#FF00D6',
-		accentRgb: '255, 0, 214',
-		descEn: 'Discover trending Reddit and GitHub content in real time.',
-		descTr: 'Reddit ve GitHub trending içeriklerini anlık keşfedin.',
-		href: '/social',
-		icon: 'activity',
-		titleEn: 'Social Media',
-		titleTr: 'Sosyal Medya',
-	},
-	{
-		accent: '#00C2FF',
-		accentRgb: '0, 194, 255',
-		descEn: 'Collect products and content automatically with rule-based scraping.',
-		descTr: 'Ürün ve içerikleri kurallara bağlı otomatik olarak toplayın.',
-		href: '/scraper',
-		icon: 'code',
-		titleEn: 'Web Scraper',
-		titleTr: 'Web Scraper',
-	},
-	{
-		accent: '#7B61FF',
-		accentRgb: '123, 97, 255',
-		descEn: 'Track site performance and mobile friendliness scores.',
-		descTr: 'Site performansı ve mobil uyumluluk skorlaması.',
-		href: '/seo',
-		icon: 'search',
-		titleEn: 'SEO Analysis',
-		titleTr: 'SEO Analiz',
-	},
-	{
-		accent: '#FF00D6',
-		accentRgb: '255, 0, 214',
-		descEn: 'Amazon TR and local marketplace price history with alerts.',
-		descTr: 'Amazon TR ve yerel pazar fiyat geçmişi alarm sistemi.',
-		href: '/price-tracker',
-		icon: 'shopping-cart',
-		titleEn: 'Price Tracking',
-		titleTr: 'Fiyat Takip',
-	},
-	{
-		accent: '#00C2FF',
-		accentRgb: '0, 194, 255',
-		descEn: 'Monitor API uptime and critical system health checks.',
-		descTr: 'API uptime ve kritik sistem sağlık kontrolü.',
-		href: '/api-monitor',
-		icon: 'server',
-		titleEn: 'API Monitoring',
-		titleTr: 'API İzleme',
-	},
-	{
-		accent: '#7B61FF',
-		accentRgb: '123, 97, 255',
-		descEn: 'Build fully customizable widget grids for your own dashboards.',
-		descTr: 'Tamamen özelleştirilebilir widget grid yapısı.',
-		href: '/dashboard-builder',
-		icon: 'layout-dashboard',
-		titleEn: 'Dashboard Builder',
-		titleTr: 'Dashboard Builder',
-	},
-] as const;
+import { buildDemoAccessHref, demoTargets as modules } from '../lib/demoAccess';
 
 const moduleIcons: Record<string, string> = {
 	'bar-chart-2':
@@ -126,10 +42,10 @@ const moduleIcons: Record<string, string> = {
 		/>
 	</head>
 	<body class="dp-home-page landing-page min-h-screen bg-black font-['Inter',sans-serif] text-neutral-100 selection:bg-[#7B61FF]/40">
-		<CryptoTopbar activePage="home" switchVariant="cyber" />
+		<CryptoTopbar activePage="home" switchVariant="cyber" navMode="landing" />
 
 		<main class="relative overflow-hidden">
-			<section class="relative overflow-hidden px-6 pb-24 pt-20 md:pb-32 md:pt-28 lg:pb-40 lg:pt-32">
+			<section id="overview" class="relative overflow-hidden scroll-mt-24 px-6 pb-24 pt-20 md:pb-32 md:pt-28 lg:pb-40 lg:pt-32">
 				<div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
 				<div class="relative mx-auto max-w-7xl">
@@ -150,21 +66,21 @@ const moduleIcons: Record<string, string> = {
 							</div>
 
 							<div class="reveal-target mt-10 flex flex-col gap-4 sm:flex-row sm:items-center" data-direction="up" style="transition-delay: 300ms;">
-								<button
-									id="startDemoBtn"
+								<a
+									href={buildDemoAccessHref('/dashboard')}
 									class="group inline-flex w-full items-center justify-center gap-3 bg-white px-8 py-4 text-base font-black uppercase tracking-[0.24em] text-black transition-all duration-300 hover:bg-neutral-200 active:scale-[0.98] sm:w-[420px]"
 								>
-									<span data-start-label data-i18n-en="Start Analysis">Analizi Başlat</span>
+									<span data-i18n-en="Open Demo Platform">Demo Platformunu Aç</span>
 									<svg class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
 										<path d="M5 12h14"></path>
 										<path d="m12 5 7 7-7 7"></path>
 									</svg>
-								</button>
+								</a>
 							</div>
 						</div>
 
 						<div class="reveal-target relative hidden lg:block" data-direction="left" style="transition-delay: 400ms;">
-							<div class="relative overflow-hidden rounded-2xl border border-white/10 bg-[#080808] shadow-[0_0_60px_rgba(0,0,0,0.45)]">
+							<div class="relative overflow-hidden border border-white/10 bg-[#080808] shadow-[0_0_60px_rgba(0,0,0,0.45)]">
 								<div class="flex items-center gap-3 border-b border-white/5 bg-white/5 px-5 py-4">
 									<div class="flex gap-2">
 										<div class="h-2.5 w-2.5 rounded-full bg-white/10"></div>
@@ -192,7 +108,7 @@ const moduleIcons: Record<string, string> = {
 				</div>
 			</section>
 
-			<section id="modules" class="bg-[#020202] px-6 py-24 sm:py-28 lg:py-32">
+			<section id="modules" class="scroll-mt-24 bg-[#020202] px-6 py-24 sm:py-28 lg:py-32">
 				<div class="mx-auto max-w-7xl">
 					<div class="reveal-target mb-16" data-direction="up">
 						<h2 class="text-3xl font-black tracking-tighter text-white sm:text-4xl md:text-5xl" data-i18n-en="Modular Architecture">Modüler Mimari</h2>
@@ -204,13 +120,12 @@ const moduleIcons: Record<string, string> = {
 					<div class="grid grid-cols-1 gap-1 md:grid-cols-2 xl:grid-cols-4">
 						{modules.map((mod, idx) => (
 							<a
-								href={mod.href}
-								data-demo-link
+								href={buildDemoAccessHref(mod.href)}
 								class="landing-card reveal-target group relative overflow-hidden border border-white/5 bg-[#050505] p-10 transition-all duration-300 hover:bg-[#080808]"
 								data-direction="up"
 								style={`--module-accent:${mod.accent}; --module-accent-rgb:${mod.accentRgb}; transition-delay:${idx * 50}ms;`}
 							>
-								<div class="mb-8 inline-flex rounded-xl bg-white/5 p-3 transition-transform duration-500 group-hover:scale-110" style={`color: ${mod.accent};`}>
+								<div class="mb-8 inline-flex border border-white/8 bg-white/5 p-3 transition-transform duration-500 group-hover:scale-110" style={`color: ${mod.accent};`}>
 									<svg
 										class="h-6 w-6"
 										fill="none"
@@ -224,14 +139,14 @@ const moduleIcons: Record<string, string> = {
 									></svg>
 								</div>
 								<h3 class="mb-4 text-xl font-bold tracking-tight text-white" data-i18n-en={mod.titleEn}>{mod.titleTr}</h3>
-								<p class="text-sm font-medium leading-relaxed text-neutral-500" data-i18n-en={mod.descEn}>{mod.descTr}</p>
+								<p class="text-sm font-medium leading-relaxed text-neutral-500" data-i18n-en={mod.descriptionEn}>{mod.descriptionTr}</p>
 							</a>
 						))}
 					</div>
 				</div>
 			</section>
 
-			<section class="relative overflow-hidden border-t border-white/5 px-6 py-28 sm:py-32 lg:py-40">
+			<section id="access" class="relative overflow-hidden scroll-mt-24 border-t border-white/5 px-6 py-28 sm:py-32 lg:py-40">
 				<div class="relative z-10 mx-auto max-w-4xl text-center">
 					<div class="reveal-target" data-direction="up">
 						<h2 class="text-4xl font-black tracking-tighter text-white sm:text-5xl md:text-7xl">
@@ -242,137 +157,17 @@ const moduleIcons: Record<string, string> = {
 						<p class="mx-auto mt-8 max-w-2xl text-lg font-medium leading-8 text-neutral-500 sm:text-xl" data-i18n-en="Join the early access program and give your team full control over the signal pipeline.">
 							Sistem yöneticileri için tam erişim yetkisi sağlayan Early Access Programına bugün katılın.
 						</p>
-						<button
-							id="ctaDemoBtn"
-							class="mt-12 inline-flex items-center justify-center rounded-md bg-white px-12 py-4 text-lg font-black text-black transition-all duration-300 hover:bg-neutral-200 active:scale-[0.98]"
-							data-i18n-en="Try It Free Now"
+						<a
+							href={buildDemoAccessHref('/dashboard-builder')}
+							class="mt-12 inline-flex items-center justify-center bg-white px-12 py-4 text-lg font-black text-black transition-all duration-300 hover:bg-neutral-200 active:scale-[0.98]"
+							data-i18n-en="Enter The Platform"
 						>
-							Şimdi Ücretsiz Dene
-						</button>
+							Platforma Gir
+						</a>
 					</div>
 				</div>
 			</section>
 		</main>
-
-		<script define:vars={{ publicApiBaseUrl }}>
-			function apiUrl(path) {
-				return publicApiBaseUrl ? new URL(path, publicApiBaseUrl).toString() : path;
-			}
-
-			async function parseJsonResponse(response) {
-				const text = await response.text();
-
-				if (!text.trim()) {
-					return null;
-				}
-
-				try {
-					return JSON.parse(text);
-				} catch (error) {
-					console.warn('Received invalid JSON response.', error);
-					return null;
-				}
-			}
-
-			function resolveLocale() {
-				const storedLocale = localStorage.getItem('dp-locale');
-				if (storedLocale === 'en' || storedLocale === 'tr') {
-					return storedLocale;
-				}
-
-				if (window.DataPulseI18n?.getLocale) {
-					return window.DataPulseI18n.getLocale();
-				}
-
-				return navigator.language?.toLowerCase().startsWith('en') ? 'en' : 'tr';
-			}
-
-			function t(tr, en) {
-				return resolveLocale() === 'en' ? en : tr;
-			}
-
-			let sessionBootstrapPromise = null;
-
-			async function ensureDemoSession() {
-				if (sessionBootstrapPromise) return sessionBootstrapPromise;
-
-				sessionBootstrapPromise = fetch(apiUrl('/api/session/start'), {
-					method: 'POST',
-					credentials: 'include',
-				})
-					.then(async (response) => {
-						const data = await parseJsonResponse(response);
-						if (!response.ok || !data?.success) {
-							throw new Error(data?.error || t('Demo oturumu başlatılamadı. Lütfen tekrar deneyin.', 'Demo session could not be started. Please try again.'));
-						}
-					})
-					.finally(() => {
-						sessionBootstrapPromise = null;
-					});
-
-				return sessionBootstrapPromise;
-			}
-
-			async function openModule(href) {
-				if (!href) return;
-
-				try {
-					await ensureDemoSession();
-					window.location.href = href;
-				} catch (error) {
-					console.error('Failed to open module:', error);
-					alert(error instanceof Error ? error.message : t('Bağlantı hatası. Sunucunun çalıştığından emin olun.', 'Connection error. Make sure the server is running.'));
-				}
-			}
-
-			const startDemoButton = document.getElementById('startDemoBtn');
-			const ctaDemoButton = document.getElementById('ctaDemoBtn');
-			const startDemoLabel = startDemoButton?.querySelector('[data-start-label]');
-
-			function setStartButtonLabel(label) {
-				if (startDemoLabel) {
-					startDemoLabel.textContent = label;
-					return;
-				}
-
-				if (startDemoButton) {
-					startDemoButton.textContent = label;
-				}
-			}
-
-			async function launchDashboard() {
-				if (!startDemoButton) return;
-
-				setStartButtonLabel(t('Başlatılıyor...', 'Starting...'));
-				startDemoButton.disabled = true;
-				if (ctaDemoButton) {
-					ctaDemoButton.disabled = true;
-				}
-
-				try {
-					await ensureDemoSession();
-					window.location.href = '/dashboard';
-				} catch (error) {
-					console.error('Failed to start demo:', error);
-					alert(error instanceof Error ? error.message : t('Bağlantı hatası. Sunucunun çalıştığından emin olun.', 'Connection error. Make sure the server is running.'));
-					setStartButtonLabel(t('Analizi Başlat', 'Start Analysis'));
-					startDemoButton.disabled = false;
-					if (ctaDemoButton) {
-						ctaDemoButton.disabled = false;
-					}
-				}
-			}
-
-			startDemoButton?.addEventListener('click', launchDashboard);
-			ctaDemoButton?.addEventListener('click', launchDashboard);
-
-			document.querySelectorAll('[data-demo-link]').forEach((link) => {
-				link.addEventListener('click', async (event) => {
-					event.preventDefault();
-					await openModule(link.getAttribute('href'));
-				});
-			});
-		</script>
 
 		<script>
 			document.addEventListener('DOMContentLoaded', () => {

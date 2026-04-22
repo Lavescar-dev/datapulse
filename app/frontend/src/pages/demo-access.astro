@@ -1,0 +1,651 @@
+---
+import '../styles/global.css';
+import CryptoTopbar from '../components/layout/CryptoTopbar.astro';
+import { demoTargets } from '../lib/demoAccess';
+
+const publicApiBaseUrl = import.meta.env.PUBLIC_DATAPULSE_API_BASE_URL || '';
+const fallbackTarget = demoTargets[0];
+---
+
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="generator" content={Astro.generator} />
+		<title data-i18n-en="DataPulse Demo Platform">DataPulse Demo Platformu</title>
+	</head>
+	<body
+		class="dp-access-page min-h-screen bg-black font-['Inter',sans-serif] text-neutral-100 selection:bg-[#7B61FF]/40"
+		data-public-api-base-url={publicApiBaseUrl}
+		style={`--target-accent:${fallbackTarget.accent}; --target-accent-rgb:${fallbackTarget.accentRgb};`}
+	>
+		<CryptoTopbar activePage="home" switchVariant="cyber" />
+
+		<main class="relative overflow-hidden px-6 pb-14 pt-16 sm:pb-20 md:pt-20 lg:pb-24">
+			<div class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/12 to-transparent"></div>
+			<div class="pointer-events-none absolute inset-0 opacity-70">
+				<div class="absolute left-[8%] top-16 h-56 w-56 rounded-full bg-[color:var(--target-accent)]/10 blur-3xl"></div>
+				<div class="absolute bottom-0 right-[10%] h-72 w-72 rounded-full bg-fuchsia-500/10 blur-3xl"></div>
+			</div>
+
+			<div class="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-18">
+				<section class="flex flex-col justify-center">
+					<div class="max-w-2xl">
+						<p class="text-[11px] font-semibold uppercase tracking-[0.34em] text-neutral-500" data-i18n-en="Controlled access layer">Kontrollü erişim katmanı</p>
+						<h1 class="mt-6 text-5xl font-black leading-[0.92] tracking-tighter text-white sm:text-6xl md:text-[76px]">
+							<span class="block">DataPulse</span>
+							<span class="block bg-gradient-to-r from-[#00C2FF] via-[#7B61FF] to-[#FF00D6] bg-clip-text text-transparent" data-i18n-en="Demo Platform">Demo Platformu</span>
+						</h1>
+						<p class="mt-8 max-w-xl text-lg font-medium leading-8 text-neutral-400 sm:text-xl" data-i18n-en="Move from the public intro into the live workspace with a guided access flow tailored to the signal you want to inspect.">
+							İncelemek istediğiniz sinyale göre yönlenen erişim akışıyla tanıtım yüzeyinden canlı workspace'e geçin.
+						</p>
+					</div>
+
+					<div class="mt-12 grid gap-6 border-t border-white/8 pt-8 sm:grid-cols-3">
+						<div>
+							<div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-600" data-i18n-en="Target">Hedef</div>
+							<div id="heroTargetTitle" class="mt-3 text-xl font-semibold text-white">{fallbackTarget.titleTr}</div>
+							<p id="heroTargetSignal" class="mt-2 text-sm leading-7 text-neutral-500">{fallbackTarget.signalTr}</p>
+						</div>
+						<div>
+							<div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-600" data-i18n-en="Flow">Akış</div>
+							<p class="mt-3 text-sm leading-7 text-neutral-400" data-i18n-en="Identity capture, session bootstrap, workspace handoff.">
+								Kimlik alanı, oturum hazırlığı, workspace geçişi.
+							</p>
+						</div>
+						<div>
+							<div class="text-[11px] font-semibold uppercase tracking-[0.24em] text-neutral-600" data-i18n-en="Window">Pencere</div>
+							<p class="mt-3 text-sm leading-7 text-neutral-400" data-i18n-en="Single-session access designed for portfolio walkthroughs and guided reviews.">
+								Portfolyo incelemesi ve yönlendirilmiş demo oturumları için tek oturumlu erişim.
+							</p>
+						</div>
+					</div>
+
+					<div class="mt-14 grid gap-4 border-t border-white/8 pt-8 text-sm text-neutral-400">
+						<div class="flex items-start gap-4">
+							<div class="dp-access-step-index">01</div>
+							<div>
+								<div class="font-semibold uppercase tracking-[0.22em] text-neutral-500" data-i18n-en="Choose signal surface">Sinyal yüzeyini seçin</div>
+								<p class="mt-2 leading-7" data-i18n-en="The access layer keeps the workspace aligned with the module the visitor opened from the portfolio.">
+									Erişim katmanı, ziyaretçinin portfolyodan açmak istediği modülü koruyarak akışı sabitler.
+								</p>
+							</div>
+						</div>
+						<div class="flex items-start gap-4">
+							<div class="dp-access-step-index">02</div>
+							<div>
+								<div class="font-semibold uppercase tracking-[0.22em] text-neutral-500" data-i18n-en="Prepare the session">Oturumu hazırlayın</div>
+								<p class="mt-2 leading-7" data-i18n-en="A short access brief and a visible loading stage make the handoff feel intentional instead of abrupt.">
+									Kısa bir erişim özeti ve görünen hazırlık adımı, geçişi bir anda kopan demo yerine kontrollü bir açılış haline getirir.
+								</p>
+							</div>
+						</div>
+						<div class="flex items-start gap-4">
+							<div class="dp-access-step-index">03</div>
+							<div>
+								<div class="font-semibold uppercase tracking-[0.22em] text-neutral-500" data-i18n-en="Enter the workspace">Workspace'e geçin</div>
+								<p class="mt-2 leading-7" data-i18n-en="Once active, the same access marker keeps direct deep-links inside the live demo flow.">
+									Oturum açıldıktan sonra aynı erişim işareti direct deep-link girişlerini de canlı demo akışında tutar.
+								</p>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="relative">
+					<div class="dp-access-panel relative overflow-hidden rounded-[18px] border border-white/10 bg-[#080808]/92 p-6 shadow-[0_0_80px_rgba(0,0,0,0.45)] sm:p-8">
+						<div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color:var(--target-accent)] to-transparent opacity-70"></div>
+
+						<div class="flex flex-col gap-8">
+							<div>
+								<p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-neutral-500" data-i18n-en="Demo access">Demo erişimi</p>
+								<h2 class="mt-3 text-3xl font-semibold tracking-tight text-white" data-i18n-en="Open a live workspace">Canlı workspace aç</h2>
+								<p class="mt-3 max-w-lg text-sm leading-7 text-neutral-400" data-i18n-en="This layer introduces the session context before the real DataPulse instance loads.">
+									Bu katman, gerçek DataPulse instance'i yüklenmeden önce oturum bağlamını kurar.
+								</p>
+							</div>
+
+							<div class="rounded-2xl border border-white/8 bg-white/[0.03] p-5" id="targetPreview">
+								<div class="flex items-start justify-between gap-4">
+									<div>
+										<div id="targetSignal" class="text-[11px] font-semibold uppercase tracking-[0.28em] text-neutral-500">{fallbackTarget.signalTr}</div>
+										<div id="targetTitle" class="mt-3 text-2xl font-semibold tracking-tight text-white">{fallbackTarget.titleTr}</div>
+										<p id="targetDescription" class="mt-3 max-w-md text-sm leading-7 text-neutral-400">{fallbackTarget.descriptionTr}</p>
+									</div>
+									<div id="targetRoute" class="rounded-full border border-white/10 px-3 py-1 font-['JetBrains_Mono',monospace] text-[11px] font-semibold text-neutral-500">
+										{fallbackTarget.href}
+									</div>
+								</div>
+							</div>
+
+							<div id="existingSessionPanel" class="hidden rounded-2xl border border-emerald-400/20 bg-emerald-400/6 p-5">
+								<div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+									<div>
+										<div class="text-[11px] font-semibold uppercase tracking-[0.26em] text-emerald-300" data-i18n-en="Active access session">Aktif erişim oturumu</div>
+										<div id="existingSessionSummary" class="mt-3 text-base font-semibold text-white"></div>
+										<p id="existingSessionMeta" class="mt-2 text-sm leading-7 text-emerald-100/70"></p>
+									</div>
+									<div class="flex flex-col gap-3 sm:w-[220px]">
+										<button id="continueSessionBtn" class="dp-access-primary-button" data-i18n-en="Continue current session">Mevcut oturumla devam et</button>
+										<button id="resetSessionBtn" class="dp-access-secondary-button" data-i18n-en="Use new access data">Yeni erişim bilgisi gir</button>
+									</div>
+								</div>
+							</div>
+
+							<form id="accessForm" class="grid gap-4">
+								<div class="grid gap-4 sm:grid-cols-2">
+									<label class="dp-access-field">
+										<span class="dp-access-field-label" data-i18n-en="Name">Ad Soyad</span>
+										<input id="accessName" class="dp-access-input" type="text" name="name" autocomplete="name" required />
+									</label>
+									<label class="dp-access-field">
+										<span class="dp-access-field-label" data-i18n-en="Business email">Kurumsal E-posta</span>
+										<input id="accessEmail" class="dp-access-input" type="email" name="email" autocomplete="email" required />
+									</label>
+								</div>
+
+								<div class="grid gap-4 sm:grid-cols-2">
+									<label class="dp-access-field">
+										<span class="dp-access-field-label" data-i18n-en="Team or company">Takım veya Şirket</span>
+										<input id="accessOrganization" class="dp-access-input" type="text" name="organization" autocomplete="organization" required />
+									</label>
+									<label class="dp-access-field">
+										<span class="dp-access-field-label" data-i18n-en="Review focus">İnceleme Odağı</span>
+										<select id="accessRole" class="dp-access-input" name="role" required>
+											<option value="Piyasa Takibi" data-i18n-en="Market Monitoring">Piyasa Takibi</option>
+											<option value="Haber ve Sinyal Takibi" data-i18n-en="News and Signal Desk">Haber ve Sinyal Takibi</option>
+											<option value="Operasyon ve Raporlama" data-i18n-en="Operations and Reporting">Operasyon ve Raporlama</option>
+											<option value="Araştırma ve İçerik" data-i18n-en="Research and Content">Araştırma ve İçerik</option>
+										</select>
+									</label>
+								</div>
+
+								<p class="text-sm leading-7 text-neutral-500" data-i18n-en="Use a short business context so the demo opens with a clear review intent.">
+									Kısa bir iş bağlamı girin; demo açıldığında hedef modülle uyumlu bir inceleme niyeti oluşsun.
+								</p>
+
+								<div class="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
+									<button id="accessSubmitBtn" type="submit" class="dp-access-primary-button sm:min-w-[260px]" data-i18n-en="Prepare live demo">Canlı demoyu hazırla</button>
+									<p id="formError" class="hidden text-sm font-medium text-rose-300"></p>
+								</div>
+							</form>
+						</div>
+
+						<div id="loadingOverlay" class="pointer-events-none absolute inset-0 hidden bg-[#050505]/94 px-6 py-8 backdrop-blur-xl sm:px-8">
+							<div class="flex h-full flex-col justify-between">
+								<div>
+									<div class="flex items-center gap-3">
+										<div class="h-2.5 w-2.5 rounded-full bg-[color:var(--target-accent)] shadow-[0_0_24px_var(--target-accent)] animate-pulse"></div>
+										<div class="text-[11px] font-semibold uppercase tracking-[0.32em] text-neutral-500" data-i18n-en="Live instance bootstrap">Canlı instance hazırlığı</div>
+									</div>
+									<h3 class="mt-5 text-3xl font-semibold tracking-tight text-white" data-i18n-en="The workspace is opening">Workspace açılıyor</h3>
+									<p id="loadingHeadline" class="mt-4 max-w-md text-sm leading-7 text-neutral-400">
+										Gerçek demo instance'ina geçmeden önce session ve hedef modül bağlamı doğrulanıyor.
+									</p>
+								</div>
+
+								<div class="space-y-4">
+									<div data-loading-step class="dp-loading-step">
+										<div class="dp-loading-step-index">01</div>
+										<div>
+											<div class="dp-loading-step-title" data-i18n-en="Access profile locked">Erişim profili sabitlendi</div>
+											<p class="dp-loading-step-copy" data-i18n-en="Visitor identity and review intent are attached to the demo session.">
+												Ziyaretçi kimliği ve inceleme niyeti demo oturumuna bağlanıyor.
+											</p>
+										</div>
+									</div>
+									<div data-loading-step class="dp-loading-step">
+										<div class="dp-loading-step-index">02</div>
+										<div>
+											<div class="dp-loading-step-title" data-i18n-en="Backend session started">Backend oturumu başlatıldı</div>
+											<p class="dp-loading-step-copy" data-i18n-en="The live request budget and workspace controls are being initialized.">
+												Canlı istek bütçesi ve workspace kontrolleri hazırlanıyor.
+											</p>
+										</div>
+									</div>
+									<div data-loading-step class="dp-loading-step">
+										<div class="dp-loading-step-index">03</div>
+										<div>
+											<div class="dp-loading-step-title" data-i18n-en="Module handoff ready">Modül geçişi hazır</div>
+											<p class="dp-loading-step-copy" data-i18n-en="The target workspace will open as soon as the handoff finishes.">
+												Hedef workspace geçiş tamamlanır tamamlanmaz açılacak.
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</main>
+
+		<script>
+			const {
+				clearDemoAccessSession,
+				createDemoAccessSession,
+				fetchBackendSessionStatus,
+				getDemoTarget,
+				getRequestedTarget,
+				readDemoAccessSession,
+				startBackendDemoSession,
+				writeDemoAccessSession,
+			} = window.DataPulseDemoAccess;
+			const publicApiBaseUrl = document.body.dataset.publicApiBaseUrl || '';
+			const targetPath = getRequestedTarget(window.location.search, '/dashboard');
+			const target = getDemoTarget(targetPath);
+
+			const accessForm = document.getElementById('accessForm');
+			const submitButton = document.getElementById('accessSubmitBtn');
+			const formError = document.getElementById('formError');
+			const loadingOverlay = document.getElementById('loadingOverlay');
+			const loadingHeadline = document.getElementById('loadingHeadline');
+			const loadingSteps = Array.from(document.querySelectorAll('[data-loading-step]'));
+			const existingSessionPanel = document.getElementById('existingSessionPanel');
+			const existingSessionSummary = document.getElementById('existingSessionSummary');
+			const existingSessionMeta = document.getElementById('existingSessionMeta');
+			const continueSessionBtn = document.getElementById('continueSessionBtn');
+			const resetSessionBtn = document.getElementById('resetSessionBtn');
+			const nameInput = document.getElementById('accessName');
+			const emailInput = document.getElementById('accessEmail');
+			const organizationInput = document.getElementById('accessOrganization');
+			const roleInput = document.getElementById('accessRole');
+
+			function resolveLocale() {
+				if (window.DataPulseI18n?.getLocale) {
+					return window.DataPulseI18n.getLocale();
+				}
+
+				const storedLocale = localStorage.getItem('dp-locale');
+				if (storedLocale === 'en' || storedLocale === 'tr') {
+					return storedLocale;
+				}
+
+				return navigator.language?.toLowerCase().startsWith('en') ? 'en' : 'tr';
+			}
+
+			function t(tr, en) {
+				return resolveLocale() === 'en' ? en : tr;
+			}
+
+			function setText(id, value) {
+				const element = document.getElementById(id);
+				if (element) {
+					element.textContent = value;
+				}
+			}
+
+			function setTargetContent() {
+				document.body.style.setProperty('--target-accent', target.accent);
+				document.body.style.setProperty('--target-accent-rgb', target.accentRgb);
+
+				setText('heroTargetTitle', resolveLocale() === 'en' ? target.titleEn : target.titleTr);
+				setText('heroTargetSignal', resolveLocale() === 'en' ? target.signalEn : target.signalTr);
+				setText('targetSignal', resolveLocale() === 'en' ? target.signalEn : target.signalTr);
+				setText('targetTitle', resolveLocale() === 'en' ? target.titleEn : target.titleTr);
+				setText('targetDescription', resolveLocale() === 'en' ? target.descriptionEn : target.descriptionTr);
+				setText('targetRoute', target.href);
+			}
+
+			function formatStartedAt(value) {
+				const date = new Date(value);
+				if (Number.isNaN(date.getTime())) {
+					return '';
+				}
+
+				return new Intl.DateTimeFormat(resolveLocale() === 'en' ? 'en-US' : 'tr-TR', {
+					dateStyle: 'medium',
+					timeStyle: 'short',
+				}).format(date);
+			}
+
+			function syncFormFromSession(session) {
+				if (!session) {
+					return;
+				}
+
+				nameInput.value = session.name;
+				emailInput.value = session.email;
+				organizationInput.value = session.organization;
+				roleInput.value = session.role;
+			}
+
+			function toggleExistingSession(session) {
+				if (!session) {
+					existingSessionPanel?.classList.add('hidden');
+					return;
+				}
+
+				existingSessionPanel?.classList.remove('hidden');
+				existingSessionSummary.textContent = `${session.name} - ${session.organization}`;
+				existingSessionMeta.textContent = t(
+					`${session.email} | ${session.role} | ${formatStartedAt(session.startedAt)}`,
+					`${session.email} | ${session.role} | ${formatStartedAt(session.startedAt)}`,
+				);
+				syncFormFromSession(session);
+			}
+
+			function setFormDisabled(disabled) {
+				Array.from(accessForm.elements).forEach((field) => {
+					field.disabled = disabled;
+				});
+				if (submitButton) {
+					submitButton.disabled = disabled;
+				}
+			}
+
+			function setLoading(active, activeStep = -1) {
+				if (!loadingOverlay) {
+					return;
+				}
+
+				loadingOverlay.classList.toggle('hidden', !active);
+				loadingSteps.forEach((step, index) => {
+					step.dataset.state = index < activeStep ? 'complete' : index === activeStep ? 'active' : 'idle';
+				});
+			}
+
+			function showError(message) {
+				if (!formError) {
+					return;
+				}
+
+				formError.textContent = message;
+				formError.classList.remove('hidden');
+			}
+
+			function clearError() {
+				if (!formError) {
+					return;
+				}
+
+				formError.textContent = '';
+				formError.classList.add('hidden');
+			}
+
+			async function delay(duration) {
+				await new Promise((resolve) => window.setTimeout(resolve, duration));
+			}
+
+			async function ensureBackendSession() {
+				const currentStatus = await fetchBackendSessionStatus(publicApiBaseUrl);
+				if (currentStatus?.active) {
+					return currentStatus;
+				}
+
+				await startBackendDemoSession(publicApiBaseUrl);
+				return fetchBackendSessionStatus(publicApiBaseUrl);
+			}
+
+			async function openTarget(session) {
+				clearError();
+				writeDemoAccessSession(session);
+				setFormDisabled(true);
+				setLoading(true, 0);
+					loadingHeadline.textContent = t(
+						'Gerçek demo instance\'ına geçmeden önce session ve hedef modül bağlamı doğrulanıyor.',
+						'Session context and target module are being prepared before the live demo instance opens.',
+					);
+
+				try {
+					await delay(180);
+					setLoading(true, 1);
+					await ensureBackendSession();
+					await delay(180);
+					setLoading(true, 2);
+					loadingHeadline.textContent = t(
+						`${resolveLocale() === 'en' ? target.titleEn : target.titleTr} workspace'i açılıyor.`,
+						`Opening the ${target.titleEn} workspace.`,
+					);
+					await delay(260);
+					window.location.href = targetPath;
+				} catch (error) {
+					console.error('Failed to open DataPulse demo target:', error);
+					setLoading(false);
+					setFormDisabled(false);
+					showError(
+						error instanceof Error
+							? error.message
+							: t('Demo oturumu hazırlanamadı. Sunucunun çalıştığından emin olun.', 'The demo session could not be prepared. Make sure the server is running.'),
+					);
+				}
+			}
+
+			accessForm?.addEventListener('submit', async (event) => {
+				event.preventDefault();
+				clearError();
+
+				const draft = {
+					name: nameInput.value.trim(),
+					email: emailInput.value.trim(),
+					organization: organizationInput.value.trim(),
+					role: roleInput.value.trim(),
+				};
+
+				if (!draft.name || !draft.email || !draft.organization || !draft.role) {
+					showError(t('Tum alanlari doldurun.', 'Fill in all fields.'));
+					return;
+				}
+
+				await openTarget(createDemoAccessSession(draft));
+			});
+
+			continueSessionBtn?.addEventListener('click', async () => {
+				const session = readDemoAccessSession();
+				if (!session) {
+					toggleExistingSession(null);
+					showError(t('Mevcut oturum bulunamadı. Yeni bilgi girin.', 'No active access session was found. Enter new details.'));
+					return;
+				}
+
+				await openTarget(session);
+			});
+
+			resetSessionBtn?.addEventListener('click', () => {
+				clearDemoAccessSession();
+				toggleExistingSession(null);
+				clearError();
+				nameInput.focus();
+			});
+
+			window.addEventListener('datapulse:localechange', setTargetContent);
+
+			setTargetContent();
+			toggleExistingSession(readDemoAccessSession());
+		</script>
+
+		<style is:global>
+			.dp-access-page {
+				background:
+					radial-gradient(circle at top, rgba(0, 194, 255, 0.08), transparent 28%),
+					radial-gradient(circle at 84% 14%, rgba(255, 0, 214, 0.08), transparent 24%),
+					linear-gradient(180deg, #050505 0%, #020202 100%);
+			}
+
+			.dp-access-panel {
+				backdrop-filter: blur(20px);
+			}
+
+			.dp-access-step-index {
+				display: inline-flex;
+				height: 2.5rem;
+				width: 2.5rem;
+				align-items: center;
+				justify-content: center;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 999px;
+				font-family: 'JetBrains Mono', monospace;
+				font-size: 0.72rem;
+				font-weight: 700;
+				color: #f5f5f5;
+			}
+
+			.dp-access-field {
+				display: grid;
+				gap: 0.7rem;
+			}
+
+			.dp-access-field-label {
+				font-size: 0.72rem;
+				font-weight: 700;
+				letter-spacing: 0.22em;
+				text-transform: uppercase;
+				color: #737373;
+			}
+
+			.dp-access-input {
+				width: 100%;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 12px;
+				background: rgba(255, 255, 255, 0.03);
+				padding: 0.95rem 1rem;
+				color: #fafafa;
+				font-size: 0.98rem;
+				transition:
+					border-color 180ms ease,
+					background-color 180ms ease,
+					box-shadow 180ms ease;
+			}
+
+			.dp-access-input::placeholder {
+				color: #525252;
+			}
+
+			.dp-access-input:hover {
+				border-color: rgba(var(--target-accent-rgb), 0.42);
+			}
+
+			.dp-access-input:focus {
+				outline: none;
+				border-color: rgba(var(--target-accent-rgb), 0.72);
+				box-shadow: 0 0 0 3px rgba(var(--target-accent-rgb), 0.14);
+				background: rgba(255, 255, 255, 0.05);
+			}
+
+			.dp-access-primary-button,
+			.dp-access-secondary-button {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				min-height: 3.25rem;
+				border-radius: 12px;
+				font-size: 0.88rem;
+				font-weight: 800;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				transition:
+					transform 180ms ease,
+					background-color 180ms ease,
+					border-color 180ms ease,
+					color 180ms ease;
+			}
+
+			.dp-access-primary-button {
+				background: #ffffff;
+				color: #030303;
+			}
+
+			.dp-access-primary-button:hover {
+				transform: translateY(-1px);
+				background: #e5e5e5;
+			}
+
+			.dp-access-primary-button:disabled {
+				cursor: progress;
+				opacity: 0.7;
+				transform: none;
+			}
+
+			.dp-access-secondary-button {
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				background: rgba(255, 255, 255, 0.03);
+				color: #d4d4d8;
+			}
+
+			.dp-access-secondary-button:hover {
+				border-color: rgba(255, 255, 255, 0.18);
+				color: #fafafa;
+			}
+
+			.dp-loading-step {
+				display: grid;
+				grid-template-columns: auto 1fr;
+				gap: 1rem;
+				align-items: start;
+				padding: 1rem 0;
+				border-top: 1px solid rgba(255, 255, 255, 0.06);
+				opacity: 0.45;
+				transition: opacity 180ms ease, transform 180ms ease;
+			}
+
+			.dp-loading-step:first-child {
+				border-top: 0;
+			}
+
+			.dp-loading-step[data-state='active'],
+			.dp-loading-step[data-state='complete'] {
+				opacity: 1;
+			}
+
+			.dp-loading-step[data-state='active'] {
+				transform: translateX(4px);
+			}
+
+			.dp-loading-step-index {
+				display: inline-flex;
+				height: 2.2rem;
+				width: 2.2rem;
+				align-items: center;
+				justify-content: center;
+				border-radius: 999px;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				font-family: 'JetBrains Mono', monospace;
+				font-size: 0.72rem;
+				font-weight: 700;
+				color: #a3a3a3;
+			}
+
+			.dp-loading-step[data-state='active'] .dp-loading-step-index,
+			.dp-loading-step[data-state='complete'] .dp-loading-step-index {
+				border-color: rgba(var(--target-accent-rgb), 0.5);
+				color: #fafafa;
+				box-shadow: 0 0 24px rgba(var(--target-accent-rgb), 0.12);
+			}
+
+			.dp-loading-step-title {
+				font-size: 0.82rem;
+				font-weight: 700;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+				color: #fafafa;
+			}
+
+			.dp-loading-step-copy {
+				margin-top: 0.45rem;
+				font-size: 0.9rem;
+				line-height: 1.75;
+				color: #a3a3a3;
+			}
+
+			@media (max-width: 640px) {
+				.dp-access-panel {
+					border-radius: 16px;
+				}
+
+				.dp-access-primary-button,
+				.dp-access-secondary-button {
+					width: 100%;
+				}
+			}
+		</style>
+	</body>
+</html>
