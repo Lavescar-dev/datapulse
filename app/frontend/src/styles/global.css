@@ -249,9 +249,6 @@ html.light .bg-black\/50 {
 }
 
 .shell-topbar-cta {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
 	gap: 0.5rem;
 	padding: 0.72rem 1rem;
 	background: linear-gradient(135deg, #ffffff 0%, #e5f4ff 100%);
